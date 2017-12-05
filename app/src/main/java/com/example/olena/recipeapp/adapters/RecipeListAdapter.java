@@ -36,7 +36,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
-
+    public List<Recipe> getListOfRecipes() {
+        return listOfRecipes;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,13 +63,17 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if(holder instanceof RecipeHolder) {
             ((RecipeHolder) holder).titleTxt.setText(listOfRecipes.get(position).getTitle());
             ((RecipeHolder) holder).publisherTxt.setText(listOfRecipes.get(position).getPublisher());
-            ((RecipeHolder) holder).sourceLinkTxt.setText(listOfRecipes.get(position).getSourceUrl());
             Picasso.with(context).load(listOfRecipes.get(position).getImageUrl()).into(((RecipeHolder) holder).imageView);
-            ViewCompat.setTransitionName(((RecipeHolder) holder).imageView, "image"+position);
+            if(listOfRecipes.get(position).getSocialRank() == 100){
+                ((RecipeHolder)holder).trandingTxt.setText("  Popular");
+                ((RecipeHolder)holder).trandingTxt.setVisibility(View.VISIBLE);
+
+            }
+            ViewCompat.setTransitionName(((RecipeHolder) holder).getImageView(), String.valueOf(position) + "_image");
             ((RecipeHolder)holder).cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    recipeItemClickListener.onRecipeItemClick(position,listOfRecipes.get(position),((RecipeHolder)holder).imageView);
+                    recipeItemClickListener.onRecipeItemClick(((RecipeHolder)holder),position,RecipeListAdapter.this);
                 }
             });
         }
@@ -93,24 +99,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return listOfRecipes.get(position)!=null? VIEW_ITEM: VIEW_PROG;
     }
 
-    class RecipeHolder extends RecyclerView.ViewHolder {
-
-        TextView titleTxt;
-        TextView publisherTxt;
-        TextView sourceLinkTxt;
-        ImageView imageView;
-        CardView cardView;
-
-        RecipeHolder(View itemView, final Context context) {
-            super(itemView);
-            titleTxt = itemView.findViewById(R.id.titleTxt);
-            publisherTxt = itemView.findViewById(R.id.authorTxt);
-            sourceLinkTxt = itemView.findViewById(R.id.sourceLink);
-            imageView = itemView.findViewById(R.id.imageView);
-            cardView = itemView.findViewById(R.id.card_view);
-        }
-
-    }
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
         ProgressBar progressBar;
         ProgressViewHolder(View v) {

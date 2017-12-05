@@ -24,8 +24,6 @@ public class ProfileFragment extends Fragment {
     private ImageView profilePic;
 
     public ProfileFragment() {
-        // Required empty public constructor
-//        ((MainNavActivity)getActivity()).setSearchGone();
     }
 
 

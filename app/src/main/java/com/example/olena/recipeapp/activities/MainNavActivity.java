@@ -1,9 +1,11 @@
 package com.example.olena.recipeapp.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
@@ -17,10 +19,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.olena.recipeapp.R;
 import com.example.olena.recipeapp.fragments.ProfileFragment;
+import com.example.olena.recipeapp.fragments.RecipeDetailsFragment;
 import com.example.olena.recipeapp.fragments.RecyclerViewFragment;
 import com.facebook.login.LoginManager;
 
@@ -32,6 +37,8 @@ public class MainNavActivity extends AppCompatActivity
     private EditText editText;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+    private RecyclerViewFragment recyclerViewFragment;
+    private ImageButton deleteBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,20 @@ public class MainNavActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         editText = findViewById(R.id.searchEdit);
-        startMainFragment();
+        deleteBtn = findViewById(R.id.deleteBtn);
+        if (savedInstanceState != null) {
+            Fragment fragment = getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
+            if (fragment instanceof RecyclerViewFragment){
+                recyclerViewFragment = (RecyclerViewFragment) fragment;
+            }
+            else if(fragment instanceof RecipeDetailsFragment){
+
+
+            }
+        }
+        else {
+            startMainFragment();
+        }
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -60,12 +80,21 @@ public class MainNavActivity extends AppCompatActivity
                     startSearchFragment();
                     return true;
                 }
+
                 return false;
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
+                startMainFragment();
             }
         });
     }
     private void startMainFragment(){
-        RecyclerViewFragment recyclerViewFragment = new RecyclerViewFragment();
+        recyclerViewFragment = new RecyclerViewFragment();
         recyclerViewFragment.setSearch(false);
         recyclerViewFragment.setSearchString("");
         fragmentManager = getSupportFragmentManager();
@@ -76,26 +105,18 @@ public class MainNavActivity extends AppCompatActivity
     private void startSearchFragment(){
         String str = editText.getText().toString();
         if(!str.equals("")){
-            RecyclerViewFragment searchFragment = new RecyclerViewFragment();
-            searchFragment.setSearch(true);
-            searchFragment.setSearchString(str);
+            recyclerViewFragment = new RecyclerViewFragment();
+            recyclerViewFragment.setSearch(true);
+            recyclerViewFragment.setSearchString(str);
             getSupportFragmentManager()
                     .beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragment_container, searchFragment)
+                    .replace(R.id.fragment_container, recyclerViewFragment)
                     .commit();
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,7 +159,7 @@ public class MainNavActivity extends AppCompatActivity
             LoginManager.getInstance().logOut();
             goToLoginPage();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -149,9 +170,31 @@ public class MainNavActivity extends AppCompatActivity
         startActivity(intent);
     }
     public void setSearchVisible(){
+        if(editText!=null)
         editText.setVisibility(View.VISIBLE);
+        deleteBtn.setVisibility(View.VISIBLE);
     }
     public void setSearchGone(){
+        if(editText!=null)
         editText.setVisibility(View.GONE);
+        deleteBtn.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getSupportFragmentManager().putFragment(outState, "myFragmentName", recyclerViewFragment);
+    }
+    @Override
+    public void onBackPressed() {
+
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+
+            getFragmentManager().popBackStack();
+        } else {
+
+            super.onBackPressed();
+        }
     }
 }
