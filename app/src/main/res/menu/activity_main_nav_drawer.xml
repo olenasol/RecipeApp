@@ -6,14 +6,12 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/profile"
+            android:background="@color/light_gray"
             android:icon="@drawable/ic_menu_camera"
             android:title="Profile" />
         <item
-            android:id="@+id/likes"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Likes" />
-        <item
             android:id="@+id/logout"
+            android:background="@color/dark_gray"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Logout" />
 

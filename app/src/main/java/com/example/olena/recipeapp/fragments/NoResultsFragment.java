@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 
 import com.example.olena.recipeapp.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class NoResultsFragment extends Fragment {
 
 

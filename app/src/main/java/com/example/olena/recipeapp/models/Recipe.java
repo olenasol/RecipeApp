@@ -1,9 +1,14 @@
 package com.example.olena.recipeapp.models;
 
+import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Recipe implements Parcelable {
     @SerializedName("recipe_id")
@@ -17,6 +22,8 @@ public class Recipe implements Parcelable {
     private String sourceUrl;
     @SerializedName("social_rank")
     private double socialRank;
+
+    private ArrayList<String> listOfIngredients;
 
     public Recipe(String recipeId, String title, String publisher, String imageUrl, String sourceUrl,double socialRank) {
         this.recipeId = recipeId;
@@ -34,6 +41,25 @@ public class Recipe implements Parcelable {
         this.imageUrl = in.readString();
         this.sourceUrl = in.readString();
         this.socialRank = in.readDouble();
+        this.listOfIngredients = in.createStringArrayList();
+
+    }
+
+
+    public ArrayList<String> getListOfIngredients() {
+        return listOfIngredients;
+    }
+
+    public void setListOfIngredients(ArrayList<String> listOfIngredients) {
+        this.listOfIngredients = listOfIngredients;
+    }
+    public String getListOfIngredientsString(){
+        StringBuilder s = new StringBuilder("");
+        for(String ing:listOfIngredients){
+            s.append(ing).append(", ");
+        }
+        s.replace(s.length()-2,s.length(),".");
+        return s.toString();
     }
 
     public String getRecipeId() {
@@ -97,6 +123,7 @@ public class Recipe implements Parcelable {
         dest.writeString(this.imageUrl);
         dest.writeString(this.sourceUrl);
         dest.writeDouble(this.socialRank);
+        dest.writeStringList(this.listOfIngredients);
     }
     public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
         public Recipe createFromParcel(Parcel in) {

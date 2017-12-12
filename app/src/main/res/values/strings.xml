@@ -12,6 +12,14 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="CONSUMER_KEY">LhVVTfV8goPOkaYsgqM0xVxsG</string>
+    <string name="CONSUMER_SECRET">	ND2QsEBcBhL10FWBVtAYawrkHx3nXDHKLG0gkrtx3smH62z5oA</string>
+
 
     <string name="action_settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="go_to_main_content">Go to main content</string>
+    <string name="title_activity_temp">Temp</string>
+    <string name="image_goes_here">Image goes here</string>
+    <string name="go_to_top">go to top</string>
 </resources>

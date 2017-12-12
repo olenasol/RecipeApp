@@ -18,7 +18,7 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
     TextView trandingTxt;
     CardView cardView;
 
-    RecipeHolder(View itemView, final Context context) {
+    RecipeHolder(View itemView) {
         super(itemView);
         titleTxt = itemView.findViewById(R.id.titleTxt);
         publisherTxt = itemView.findViewById(R.id.authorTxt);

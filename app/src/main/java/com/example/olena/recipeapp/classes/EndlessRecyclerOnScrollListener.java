@@ -1,4 +1,4 @@
-package com.example.olena.recipeapp.interfaces;
+package com.example.olena.recipeapp.classes;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,8 +33,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             }
         }
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-            // End has been reached
-            // Do something
             current_page++;
             onLoadMore(current_page);
             loading = true;

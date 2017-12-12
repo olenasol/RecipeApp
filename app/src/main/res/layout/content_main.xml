@@ -6,14 +6,11 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.olena.recipeapp.activities.MainNavActivity"
-    tools:showIn="@layout/app_bar_main_nav">
-
+    tools:showIn="@layout/activity_main">
     <EditText
         android:id="@+id/searchEdit"
-
         android:layout_width="match_parent"
         android:layout_height="45dp"
-
         android:background="@drawable/rounded_edittext"
         android:hint="@string/search"
         android:paddingLeft="15dp"

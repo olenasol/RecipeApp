@@ -47,7 +47,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recipe_item, parent, false);
             context = parent.getContext();
-           vh = new RecipeHolder(view, parent.getContext());
+           vh = new RecipeHolder(view);
         }
         else {
             View v = LayoutInflater.from(parent.getContext())
@@ -82,6 +82,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+//    public void addFirstDataToListOfRecipes(List<Recipe> additionalList){
+//        for(int i=0;i<additionalList.size();i++){
+//            listOfRecipes.add(i,additionalList.get(i));
+//        }
+//        notifyDataSetChanged();
+//    }
     public void addDataToListOfRecipes(List<Recipe> additionalList){
         for(Recipe recipe:additionalList){
             listOfRecipes.add(recipe);

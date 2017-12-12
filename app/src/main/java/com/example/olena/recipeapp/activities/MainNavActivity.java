@@ -2,13 +2,17 @@ package com.example.olena.recipeapp.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,68 +26,85 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.olena.recipeapp.R;
 import com.example.olena.recipeapp.fragments.ProfileFragment;
 import com.example.olena.recipeapp.fragments.RecipeDetailsFragment;
 import com.example.olena.recipeapp.fragments.RecyclerViewFragment;
+import com.example.olena.recipeapp.models.Recipe;
 import com.facebook.login.LoginManager;
 
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.LogManager;
 
 public class MainNavActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+       {
+    private boolean isTypedIn = false;
+    private boolean isSearched = false;
     private EditText editText;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private RecyclerViewFragment recyclerViewFragment;
     private ImageButton deleteBtn;
+    private Timer timer;
+    public static ArrayList<Recipe> listOfNewRecipies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_nav);
-        Toolbar toolbar =  findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView =  findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        setContentView(R.layout.activity_main);
 
         editText = findViewById(R.id.searchEdit);
         deleteBtn = findViewById(R.id.deleteBtn);
         if (savedInstanceState != null) {
             Fragment fragment = getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
             if (fragment instanceof RecyclerViewFragment){
-                recyclerViewFragment = (RecyclerViewFragment) fragment;
-            }
-            else if(fragment instanceof RecipeDetailsFragment){
-
-
+               recyclerViewFragment = (RecyclerViewFragment) fragment;
             }
         }
         else {
+            getNewRecipe();
             startMainFragment();
         }
+
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     startSearchFragment();
+                    isSearched = true;
                     return true;
                 }
-
                 return false;
             }
         });
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchWhenIdle();
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                isTypedIn = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length()==0&&isTypedIn&&isSearched){
+                    startMainFragment();
+                    isTypedIn = false;
+                    isSearched = false;
+                }
+            }
+        });
+
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,14 +113,16 @@ public class MainNavActivity extends AppCompatActivity
                 startMainFragment();
             }
         });
+
     }
+
     private void startMainFragment(){
         recyclerViewFragment = new RecyclerViewFragment();
         recyclerViewFragment.setSearch(false);
         recyclerViewFragment.setSearchString("");
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container,recyclerViewFragment);
+        fragmentTransaction.add(R.id.fragment_container,recyclerViewFragment,"REC_FRAG");
         fragmentTransaction.commit();
     }
     private void startSearchFragment(){
@@ -111,90 +134,51 @@ public class MainNavActivity extends AppCompatActivity
             getSupportFragmentManager()
                     .beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragment_container, recyclerViewFragment)
+                    .replace(R.id.fragment_container, recyclerViewFragment,"REC_FRAG")
                     .commit();
         }
     }
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_nav, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    private Recipe getNewRecipe(){
+        Recipe recipe = getIntent().getParcelableExtra("new_recipe");
+        if(recipe!=null) {
+            listOfNewRecipies.add(0, recipe);
         }
-
-        return super.onOptionsItemSelected(item);
+        return recipe;
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.profile) {
-            ProfileFragment profileFragment = new ProfileFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragment_container, profileFragment)
-                    .commit();
-        } else if (id == R.id.likes) {
-
-        } else if (id == R.id.logout) {
-            LoginManager.getInstance().logOut();
-            goToLoginPage();
-        }
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void goToLoginPage() {
-        Intent intent = new Intent(this,FacebookLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
     public void setSearchVisible(){
-        if(editText!=null)
+        if((editText!=null)&&(deleteBtn!=null))
         editText.setVisibility(View.VISIBLE);
         deleteBtn.setVisibility(View.VISIBLE);
     }
     public void setSearchGone(){
-        if(editText!=null)
-        editText.setVisibility(View.GONE);
-        deleteBtn.setVisibility(View.GONE);
+        if((editText!=null)&&(deleteBtn!=null)) {
+            editText.setVisibility(View.GONE);
+            deleteBtn.setVisibility(View.GONE);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         getSupportFragmentManager().putFragment(outState, "myFragmentName", recyclerViewFragment);
     }
-    @Override
-    public void onBackPressed() {
+    private void searchWhenIdle(){
+        isTypedIn = true;
 
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-
-            getFragmentManager().popBackStack();
-        } else {
-
-            super.onBackPressed();
+        if(timer != null) {
+            timer.cancel();
         }
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isSearched = true;
+                startSearchFragment();
+            }
+        }, 2000);
+
     }
+
 }
