@@ -1,18 +1,16 @@
 package com.example.olena.recipeapp.adapters;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.olena.recipeapp.R;
 
 import java.util.ArrayList;
 
-public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientHolder> {
+public class IngredientListAdapter extends RecyclerView.Adapter<IngredientHolder> {
 
     private ArrayList<String> listOfIngredients;
 
@@ -28,7 +26,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
 
     @Override
     public void onBindViewHolder(IngredientHolder holder, int position) {
-        holder.ingredientTxt.setText(listOfIngredients.get(position));
+        holder.getIngredientTxt().setText(listOfIngredients.get(position));
     }
 
     @Override
@@ -36,15 +34,4 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
         return listOfIngredients.size();
     }
 
-    public class IngredientHolder extends RecyclerView.ViewHolder {
-
-        TextView ingredientTxt;
-
-
-        IngredientHolder(View itemView) {
-            super(itemView);
-            ingredientTxt = itemView.findViewById(R.id.ingredientTxt);
-
-        }
-    }
 }

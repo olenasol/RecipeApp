@@ -3,8 +3,6 @@ package com.example.olena.recipeapp.client;
 
 import com.example.olena.recipeapp.models.RecipeBundle;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

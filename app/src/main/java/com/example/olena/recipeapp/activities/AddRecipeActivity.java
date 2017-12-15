@@ -1,46 +1,34 @@
 package com.example.olena.recipeapp.activities;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.olena.recipeapp.R;
 import com.example.olena.recipeapp.models.Recipe;
 import com.facebook.Profile;
-import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
-import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
@@ -49,12 +37,13 @@ public class AddRecipeActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 2;
     private Uri imageUri;
     private EditText firstIngredientEdit;
-    private ImageButton firstAddButton;
     private EditText titleEditTxt;
-    private Button submitBtn;
-    private ArrayList<EditText> listOfEditTexts = new ArrayList<>();
-    String mCurrentPhotoPath;
+    private ArrayList<EditText> listOfEditTexts;
     private View.OnClickListener onClickListener;
+
+    public AddRecipeActivity() {
+        listOfEditTexts = new ArrayList<>();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +53,8 @@ public class AddRecipeActivity extends AppCompatActivity {
         selectImageBtn = findViewById(R.id.imageBtn);
         titleEditTxt = findViewById(R.id.titleEdit);
         firstIngredientEdit = findViewById(R.id.ingr1Text);
-        firstAddButton = findViewById(R.id.add1Btn);
-        submitBtn = findViewById(R.id.submitBtn);
+        ImageButton firstAddButton = findViewById(R.id.add1Btn);
+        Button submitBtn = findViewById(R.id.submitBtn);
 
         selectImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +89,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         final AlertDialog alertDialog = getDialogBuilder().create();
         alertDialog.show();
         ImageButton galleryImageBtn = alertDialog.findViewById(R.id.openGalleryBtn);
+        assert galleryImageBtn != null;
         galleryImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +98,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             }
         });
         ImageButton cameraImageBtn = alertDialog.findViewById(R.id.openCameraBtn);
+        assert cameraImageBtn != null;
         cameraImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,22 +115,30 @@ public class AddRecipeActivity extends AppCompatActivity {
         horLinearLayout.setLayoutParams(params);
         horLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.addView(horLinearLayout);
+        EditText editText = buildEditText();
+        listOfEditTexts.add(editText);
+        ImageButton imageButton = buildImageButton();
+        horLinearLayout.addView(editText);
+        horLinearLayout.addView(imageButton);
+    }
+    private  EditText buildEditText(){
         EditText editText = new EditText(this);
-        params = new ViewGroup.LayoutParams(680, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(680, ViewGroup.LayoutParams.WRAP_CONTENT);
         editText.setLayoutParams(params);
         editText.setBackgroundResource(R.drawable.rounded_edittext);
         editText.setPadding(16, 16, 16, 16);
         editText.requestFocus();
-        listOfEditTexts.add(editText);
+        return editText;
+    }
+    private ImageButton buildImageButton(){
         ImageButton imageButton = new ImageButton(this);
-        params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         imageButton.setLayoutParams(params);
         imageButton.setImageResource(R.mipmap.ic_add_black_24dp);
         imageButton.setPadding(16, 16, 16, 16);
         imageButton.setBackgroundColor(Color.WHITE);
         imageButton.setOnClickListener(onClickListener);
-        horLinearLayout.addView(editText);
-        horLinearLayout.addView(imageButton);
+        return imageButton;
     }
 
     @Override
@@ -172,6 +171,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
+                ex.printStackTrace();
             }
             if (photoFile != null) {
                 imageUri = FileProvider.getUriForFile(this,
@@ -183,23 +183,22 @@ public class AddRecipeActivity extends AppCompatActivity {
         }
     }
     private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
+        return File.createTempFile(
                 imageFileName,
                 ".jpg",
                 storageDir
         );
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
     }
 
 
     private AlertDialog.Builder getDialogBuilder() {
         AlertDialog.Builder builder = new AlertDialog.Builder(AddRecipeActivity.this);
         LayoutInflater inflater = AddRecipeActivity.this.getLayoutInflater();
+        @SuppressLint("InflateParams")
         View dialogView = inflater.inflate(R.layout.dialog_layout, null);
         builder.setTitle("Choose image");
         builder.setView(dialogView);

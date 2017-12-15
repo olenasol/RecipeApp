@@ -1,6 +1,5 @@
 package com.example.olena.recipeapp.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,11 +11,11 @@ import com.example.olena.recipeapp.R;
 
 public class RecipeHolder extends RecyclerView.ViewHolder {
 
-    TextView titleTxt;
-    TextView publisherTxt;
-    ImageView imageView;
-    TextView trandingTxt;
-    CardView cardView;
+    private TextView titleTxt;
+    private TextView publisherTxt;
+    private ImageView imageView;
+    private TextView trandingTxt;
+    private CardView cardView;
 
     RecipeHolder(View itemView) {
         super(itemView);
@@ -27,7 +26,23 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
         trandingTxt = itemView.findViewById(R.id.trendingTxt);
     }
 
+    public TextView getTitleTxt() {
+        return titleTxt;
+    }
+
+    public TextView getPublisherTxt() {
+        return publisherTxt;
+    }
+
     public ImageView getImageView() {
         return imageView;
+    }
+
+    public TextView getTrandingTxt() {
+        return trandingTxt;
+    }
+
+    public CardView getCardView() {
+        return cardView;
     }
 }

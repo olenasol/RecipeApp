@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.olena.recipeapp.activities.MainNavActivity"
     tools:showIn="@layout/activity_main">
@@ -11,9 +12,11 @@
         android:id="@+id/searchEdit"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@drawable/rounded_edittext"
+
         android:hint="@string/search"
-        android:paddingLeft="15dp"
+        android:paddingStart="15dp"
+
+        android:paddingEnd="0dp"
         android:visibility="gone"
         >
 
@@ -23,12 +26,13 @@
         android:id="@+id/deleteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="24dp"
+        android:layout_marginStart="24dp"
         android:background="@drawable/window_close"
         app:layout_constraintBottom_toBottomOf="@+id/searchEdit"
         app:layout_constraintRight_toRightOf="@+id/searchEdit"
         app:layout_constraintTop_toTopOf="@+id/searchEdit"
         app:layout_constraintVertical_bias="0.418"
+        android:contentDescription="@string/del_im"
         android:visibility="gone"/>
     <RelativeLayout
         android:id="@+id/fragment_container"

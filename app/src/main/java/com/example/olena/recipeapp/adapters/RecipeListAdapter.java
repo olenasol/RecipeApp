@@ -2,18 +2,11 @@ package com.example.olena.recipeapp.adapters;
 
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.olena.recipeapp.R;
 import com.example.olena.recipeapp.interfaces.RecipeItemClickListener;
@@ -25,8 +18,7 @@ import java.util.List;
 public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int VIEW_ITEM = 1;
-    private final int VIEW_PROG = 0;
-    public List<Recipe> listOfRecipes;
+    private List<Recipe> listOfRecipes;
     private final RecipeItemClickListener recipeItemClickListener;
     private Context context;
 
@@ -59,40 +51,40 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder,  int position) {
         if(holder instanceof RecipeHolder) {
-            ((RecipeHolder) holder).titleTxt.setText(listOfRecipes.get(position).getTitle());
-            ((RecipeHolder) holder).publisherTxt.setText(listOfRecipes.get(position).getPublisher());
-            Picasso.with(context).load(listOfRecipes.get(position).getImageUrl()).into(((RecipeHolder) holder).imageView);
+            ((RecipeHolder) holder).getTitleTxt().setText(listOfRecipes.get(position).getTitle());
+            ((RecipeHolder) holder).getPublisherTxt().setText(listOfRecipes.get(position).getPublisher());
+            Picasso.with(context).load(listOfRecipes.get(position).getImageUrl()).into(((RecipeHolder) holder).getImageView());
             if(listOfRecipes.get(position).getSocialRank() == 100){
-                ((RecipeHolder)holder).trandingTxt.setText("  Popular");
-                ((RecipeHolder)holder).trandingTxt.setVisibility(View.VISIBLE);
+                String str = " Popular";
+                ((RecipeHolder)holder).getTrandingTxt().setText(str);
+                ((RecipeHolder)holder).getTrandingTxt().setVisibility(View.VISIBLE);
 
             }
             ViewCompat.setTransitionName(((RecipeHolder) holder).getImageView(), String.valueOf(position) + "_image");
-            ((RecipeHolder)holder).cardView.setOnClickListener(new View.OnClickListener() {
+            ((RecipeHolder)holder).getCardView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    recipeItemClickListener.onRecipeItemClick(((RecipeHolder)holder),position,RecipeListAdapter.this);
+                    recipeItemClickListener.onRecipeItemClick(((RecipeHolder)holder),(holder).getAdapterPosition(),RecipeListAdapter.this);
                 }
             });
         }
         else {
-            ((ProgressViewHolder)holder).progressBar.setIndeterminate(true);
+            ((ProgressViewHolder)holder).getProgressBar().setIndeterminate(true);
         }
     }
 
-//    public void addFirstDataToListOfRecipes(List<Recipe> additionalList){
-//        for(int i=0;i<additionalList.size();i++){
-//            listOfRecipes.add(i,additionalList.get(i));
-//        }
-//        notifyDataSetChanged();
-//    }
     public void addDataToListOfRecipes(List<Recipe> additionalList){
-        for(Recipe recipe:additionalList){
-            listOfRecipes.add(recipe);
-        }
+        listOfRecipes.addAll(additionalList);
         notifyDataSetChanged();
+    }
+
+    public void addElementToListOfRecipes(Recipe recipe){
+        listOfRecipes.add(recipe);
+    }
+    public void removeLastFromListOfRecipes(){
+        listOfRecipes.remove(listOfRecipes.size() - 1);
     }
 
     @Override
@@ -102,15 +94,10 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemViewType(int position) {
+        int VIEW_PROG = 0;
         return listOfRecipes.get(position)!=null? VIEW_ITEM: VIEW_PROG;
     }
 
-    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
-        ProgressBar progressBar;
-        ProgressViewHolder(View v) {
-            super(v);
-            progressBar = v.findViewById(R.id.progressBar);
-        }
-    }
+
 
 }

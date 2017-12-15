@@ -19,16 +19,28 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
+                android:contentDescription="@string/recipe_image"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 />
+
+        <ImageButton
+            android:id="@+id/goBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#80000000"
+            android:src="@mipmap/ic_arrow_left_bold_box_outline_white_48dp"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/authorTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="Author"
+                android:text="@string/author"
                 app:layout_constraintBottom_toTopOf="@+id/titleTxt"
                 app:layout_constraintStart_toStartOf="@id/imageView"
                 tools:layout_editor_absoluteX="16dp" />
@@ -37,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="Title"
+                android:text="@string/title"
                 android:textSize="@dimen/text_size"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"/>
             <android.support.v7.widget.RecyclerView
@@ -50,14 +62,14 @@
                 android:id="@+id/shareFacebookBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Share"
+                android:text="@string/share"
                 app:layout_constraintTop_toBottomOf="@+id/rec_view_ingredients"/>
 
             <Button
                 android:id="@+id/shareTwitterBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Twitter"
+                android:text="@string/twitter"
                 app:layout_constraintTop_toBottomOf="@+id/shareFacebookBtn"/>
 </android.support.constraint.ConstraintLayout>
 </ScrollView>

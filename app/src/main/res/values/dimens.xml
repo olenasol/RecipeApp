@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_size">24sp</dimen>
-    <dimen name="likes_margi_start">40dp</dimen>
-    <dimen name="image_layout_width">400dp</dimen>
     <dimen name="image_layout_height">200dp</dimen>
-    <dimen name="image_margin_top">4dp</dimen>
-    <dimen name="cl_margin">10dp</dimen>
-    <dimen name="cardview_margin">10pt</dimen>
-    <dimen name="cardview_margin_start">22dp</dimen>
-    <dimen name="cardview_margin_top">8dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>

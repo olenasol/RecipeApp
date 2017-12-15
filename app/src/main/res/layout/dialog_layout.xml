@@ -10,10 +10,12 @@
        android:id="@+id/openCameraBtn"
        android:layout_width="150dp"
        android:layout_height="150dp"
-       android:src="@drawable/ic_menu_camera"/>
+       android:src="@drawable/ic_menu_camera"
+       android:contentDescription="@string/photo_im"/>
     <ImageButton
         android:id="@+id/openGalleryBtn"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/ic_menu_gallery"/>
+        android:src="@drawable/ic_menu_gallery"
+        android:contentDescription="@string/gallery_image"/>
 </LinearLayout>

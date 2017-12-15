@@ -16,7 +16,4 @@ public class RecipeBundle {
         return listOfRecipes;
     }
 
-    public void setListOfRecipes(ArrayList<Recipe> listOfRecipes) {
-        this.listOfRecipes = listOfRecipes;
-    }
 }

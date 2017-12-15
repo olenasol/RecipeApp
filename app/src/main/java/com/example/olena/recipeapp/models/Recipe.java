@@ -1,14 +1,11 @@
 package com.example.olena.recipeapp.models;
 
-import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Recipe implements Parcelable {
     @SerializedName("recipe_id")
@@ -34,7 +31,7 @@ public class Recipe implements Parcelable {
         this.socialRank = socialRank;
     }
 
-    public Recipe(Parcel in) {
+    private Recipe(Parcel in) {
         this.recipeId = in.readString();
         this.title = in.readString();
         this.publisher = in.readString();
@@ -62,13 +59,6 @@ public class Recipe implements Parcelable {
         return s.toString();
     }
 
-    public String getRecipeId() {
-        return recipeId;
-    }
-
-    public void setRecipeId(String recipeId) {
-        this.recipeId = recipeId;
-    }
 
     public String getTitle() {
         return title;
@@ -82,33 +72,14 @@ public class Recipe implements Parcelable {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getSourceUrl() {
-        return sourceUrl;
-    }
-
-    public void setSourceUrl(String sourceUrl) {
-        this.sourceUrl = sourceUrl;
     }
 
     public double getSocialRank() {
         return socialRank;
     }
 
-    public void setSocialRank(double socialRank) {
-        this.socialRank = socialRank;
-    }
 
     @Override
     public int describeContents() {

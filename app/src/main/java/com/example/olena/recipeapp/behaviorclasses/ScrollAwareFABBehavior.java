@@ -1,7 +1,7 @@
-package com.example.olena.recipeapp.classes;
+package com.example.olena.recipeapp.behaviorclasses;
 
 import android.content.Context;
-import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+@SuppressWarnings("deprecation")
 public class ScrollAwareFABBehavior extends CoordinatorLayout.Behavior<FloatingActionButton> {
 
 
@@ -19,8 +20,9 @@ public class ScrollAwareFABBehavior extends CoordinatorLayout.Behavior<FloatingA
 
 
 
+
     @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+    public void onNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull FloatingActionButton child, @NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
         int fabBottomMargin = layoutParams.bottomMargin;
@@ -32,7 +34,7 @@ public class ScrollAwareFABBehavior extends CoordinatorLayout.Behavior<FloatingA
     }
 
     @Override
-    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View directTargetChild, View target, int nestedScrollAxes) {
+    public boolean onStartNestedScroll(@NonNull CoordinatorLayout coordinatorLayout, @NonNull FloatingActionButton child, @NonNull View directTargetChild, @NonNull View target, int nestedScrollAxes) {
 
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL;
     }

@@ -7,13 +7,13 @@
         android:id="@+id/ingredientTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ingredient"
+
         android:background="@drawable/ingredient_item_shape"
         android:paddingEnd="8dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:paddingStart="20dp"
-        android:textSize="20dp"
+        android:textSize="20sp"
         />
 
 
