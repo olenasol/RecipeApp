@@ -37,15 +37,11 @@ import com.example.olena.recipeapp.socialsitesmanagers.TwitterManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 public class RecipeDetailsFragment extends Fragment {
 
-    @SuppressLint("StaticFieldLeak")
-    private static RecipeListAdapter adapter;
-    private static  int position;
+
     private String transactionName;
     private TextView titleTxt;
     private TextView authorTxt;
@@ -54,11 +50,16 @@ public class RecipeDetailsFragment extends Fragment {
     private RecyclerView recyclerViewIngr;
     private TwitterManager twitterManager;
 
-    public static RecipeDetailsFragment newInstance(int position,RecipeListAdapter adapter) {
+    public static RecipeDetailsFragment newInstance(int position, RecipeListAdapter adapter) {
+        RecipeDetailsFragment myFragment = new RecipeDetailsFragment();
+        ArrayList<Recipe> list = new ArrayList<>();
+        list.addAll(adapter.getListOfRecipes());
+        Bundle args = new Bundle();
+        args.putInt("position", position);
+        args.putParcelableArrayList("list", list);
+        myFragment.setArguments(args);
 
-        RecipeDetailsFragment.position = position;
-        RecipeDetailsFragment.adapter = adapter;
-        return new RecipeDetailsFragment();
+        return myFragment;
     }
 
     @Override
@@ -77,6 +78,7 @@ public class RecipeDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recipe_details, container, false);
+
         titleTxt = view.findViewById(R.id.titleTxt);
         authorTxt =  view.findViewById(R.id.authorTxt);
         imageView = view.findViewById(R.id.imageView);
@@ -84,21 +86,23 @@ public class RecipeDetailsFragment extends Fragment {
         recyclerViewIngr = view.findViewById(R.id.rec_view_ingredients);
         Button shareFacebookBtn = view.findViewById(R.id.shareFacebookBtn);
         Button shareTwitterBtn = view.findViewById(R.id.shareTwitterBtn);
+        final ArrayList<Recipe> listOfRecipes = getArguments().getParcelableArrayList("list");
+        final int position = getArguments().getInt("position");
         shareFacebookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FacebookManager facebookManager = new FacebookManager(getActivity());
-                facebookManager.postToFacebook(adapter.getListOfRecipes().get(position).getImageUrl(),
-                        adapter.getListOfRecipes().get(position).getTitle(),
-                        adapter.getListOfRecipes().get(position).getListOfIngredientsString());
+                facebookManager.postToFacebook(listOfRecipes.get(position).getImageUrl(),
+                        listOfRecipes.get(position).getTitle(),
+                        listOfRecipes.get(position).getListOfIngredientsString());
 
             }
         });
         shareTwitterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                twitterManager.postToTwitter(adapter.getListOfRecipes().get(position).getImageUrl(),
-                        adapter.getListOfRecipes().get(position).getListOfIngredientsString());
+                twitterManager.postToTwitter(listOfRecipes.get(position).getImageUrl(),
+                        listOfRecipes.get(position).getListOfIngredientsString());
             }
         });
         goBackBtn.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +112,12 @@ public class RecipeDetailsFragment extends Fragment {
             }
         });
         fillFields();
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getBackVisible();
+            }
+        });
         return view;
     }
 
@@ -118,14 +128,16 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
     private void fillFields(){
-        titleTxt.setText(adapter.getListOfRecipes().get(position).getTitle());
-        authorTxt.setText(adapter.getListOfRecipes().get(position).getPublisher());
+        final ArrayList<Recipe> listOfRecipes = getArguments().getParcelableArrayList("list");
+        final int position = getArguments().getInt("position");
+        titleTxt.setText(listOfRecipes.get(position).getTitle());
+        authorTxt.setText(listOfRecipes.get(position).getPublisher());
         imageView.setTransitionName(transactionName);
         Picasso.with(getContext())
-                .load(adapter.getListOfRecipes().get(position).getImageUrl())
+                .load(listOfRecipes.get(position).getImageUrl())
                 .into(imageView);
         recyclerViewIngr.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewIngr.setAdapter(new IngredientListAdapter(adapter.getListOfRecipes().get(position).getListOfIngredients()));
+        recyclerViewIngr.setAdapter(new IngredientListAdapter(listOfRecipes.get(position).getListOfIngredients()));
 
     }
 
@@ -150,7 +162,14 @@ public class RecipeDetailsFragment extends Fragment {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         }
     }
-
+    private void getBackVisible(){
+        if(goBackBtn.getVisibility()==View.GONE) {
+            goBackBtn.setVisibility(View.VISIBLE);
+        }
+        else {
+            goBackBtn.setVisibility(View.GONE);
+        }
+    }
 
 
 }

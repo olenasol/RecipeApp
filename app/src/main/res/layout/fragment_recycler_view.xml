@@ -16,9 +16,11 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginTop="15dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="10dp"
             android:visibility="gone"
             android:background="@drawable/rounded_edittext"
-
+            android:drawableLeft="@mipmap/ic_keyboard_arrow_up_black_24dp"
             android:gravity="center"
             android:text="@string/go_to_top"
             app:layout_constraintStart_toStartOf="parent"

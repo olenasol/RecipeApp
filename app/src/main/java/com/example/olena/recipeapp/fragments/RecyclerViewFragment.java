@@ -10,7 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +37,8 @@ import com.example.olena.recipeapp.models.Recipe;
 import com.example.olena.recipeapp.models.RecipeBundle;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,11 +57,13 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
     private static int yPosition;
     private boolean isSearch;
     private String searchString;
-    private  ArrayList<Recipe> listOfRecipes;
+    private static ArrayList<Recipe> listOfRecipes;
 
-    public RecyclerViewFragment() {
+
+
+    public static void setListOfRecipes(ArrayList<Recipe> listOfRecipes) {
+        RecyclerViewFragment.listOfRecipes = listOfRecipes;
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -104,6 +110,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         client = retrofit.create(RecipeClient.class);
         if (savedInstanceState != null) {
             if(savedInstanceState.getParcelableArrayList("LIST_KEY")!=null) {
+
                 ArrayList<Recipe> list = savedInstanceState.getParcelableArrayList("LIST_KEY");
                 recipeListAdapter = new RecipeListAdapter(list,RecyclerViewFragment.this);
                 recyclerView.setAdapter(recipeListAdapter);
@@ -138,6 +145,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
 
             @Override
             public void onLoadMore(final int currentPage) {
+                if(recyclerView.getAdapter()!=null&&recyclerView.getAdapter().getItemCount()>=3)
                 loadRestElements(currentPage);
             }
         });
@@ -148,6 +156,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                listOfRecipes = null;
                 loadFirstSetOfElements();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -230,7 +239,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         }
     }
     private void loadFirstSetOfElements(){
-        if(listOfRecipes==null) {
+        if(listOfRecipes == null) {
             Call<RecipeBundle> ncall = getCall(1);
             ncall.enqueue(new Callback<RecipeBundle>() {
                 @Override
@@ -279,6 +288,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
                         RecipeBundle recipeBundle = response.body();
                         assert recipeBundle != null;
                         listOfRecipes.addAll(recipeBundle.getListOfRecipes());
+
                         addIngredientsToRecipes(listOfRecipes);
                         recipeListAdapter.addDataToListOfRecipes(recipeBundle.getListOfRecipes());
                     }
@@ -295,7 +305,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
     private Call<RecipeBundle> getCall(int currentPage){
         Call<RecipeBundle> ncall;
         if (RecyclerViewFragment.this.isSearch()) {
-            ncall = client.getRecipe(RecipeClient.key, getSearchString(), Integer.valueOf(1).toString());
+            ncall = client.getRecipe(RecipeClient.key, getSearchString(), Integer.valueOf(currentPage).toString());
         } else {
             ncall = client.getRecipe(RecipeClient.key, Integer.valueOf(currentPage).toString());
 
@@ -308,9 +318,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         super.onSaveInstanceState(outState);
         ArrayList<Recipe> list = new ArrayList<>();
 
-        list.addAll(recipeListAdapter.getListOfRecipes());
-
-
+        list.addAll(listOfRecipes);
         outState.putParcelableArrayList("LIST_KEY", list);
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         outState.putInt("STATE",  linearLayoutManager.findFirstCompletelyVisibleItemPosition());

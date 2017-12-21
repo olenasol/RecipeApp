@@ -2,7 +2,10 @@ package com.example.olena.recipeapp.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -53,6 +56,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         selectImageBtn = findViewById(R.id.imageBtn);
         titleEditTxt = findViewById(R.id.titleEdit);
         firstIngredientEdit = findViewById(R.id.ingr1Text);
+        listOfEditTexts.add(firstIngredientEdit);
         ImageButton firstAddButton = findViewById(R.id.add1Btn);
         Button submitBtn = findViewById(R.id.submitBtn);
 
@@ -65,7 +69,8 @@ public class AddRecipeActivity extends AppCompatActivity {
         onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    addNewEditText();
+                 hideLastPlusSign();
+                 addNewEditText("");
 
             }
         };
@@ -77,6 +82,23 @@ public class AddRecipeActivity extends AppCompatActivity {
             }
         });
 
+        changedRotationSaved(savedInstanceState);
+
+    }
+
+    private void changedRotationSaved(Bundle savedInstanceState){
+        if(savedInstanceState != null) {
+            imageUri = savedInstanceState.getParcelable("image");
+            ArrayList<String> listOfIngredients = savedInstanceState.getStringArrayList("listIngr");
+            hideLastPlusSign();
+            for (int i = 2; i < listOfIngredients.size(); i++) {
+                addNewEditText(listOfIngredients.get(i));
+                if (i != (listOfIngredients.size() - 1)) {
+                    hideLastPlusSign();
+                }
+            }
+            selectImageBtn.setImageURI(imageUri);
+        }
     }
     private void addRecipe(){
         Recipe recipe = new Recipe("0", titleEditTxt.getText().toString(), Profile.getCurrentProfile().getName(), imageUri.toString(), "", 0);
@@ -108,7 +130,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         });
     }
 
-    private void addNewEditText() {
+    private void addNewEditText(String str) {
         LinearLayout linearLayout = findViewById(R.id.ingrLayout);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout horLinearLayout = new LinearLayout(this);
@@ -116,16 +138,28 @@ public class AddRecipeActivity extends AppCompatActivity {
         horLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.addView(horLinearLayout);
         EditText editText = buildEditText();
+        if(!str.equals("")){
+            editText.setText(str);
+        }
         listOfEditTexts.add(editText);
         ImageButton imageButton = buildImageButton();
         horLinearLayout.addView(editText);
         horLinearLayout.addView(imageButton);
     }
+    private void hideLastPlusSign(){
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,1f);
+        EditText editText = listOfEditTexts.get(listOfEditTexts.size()-1);
+        editText.setLayoutParams(params);
+        LinearLayout horLinearLayout = (LinearLayout) editText.getParent();
+        horLinearLayout.removeAllViews();
+        horLinearLayout.addView(editText);
+    }
     private  EditText buildEditText(){
         EditText editText = new EditText(this);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(680, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,0.95f);
         editText.setLayoutParams(params);
-        editText.setBackgroundResource(R.drawable.rounded_edittext);
+        editText.setBackgroundResource(R.drawable.rounded_edittext2);
         editText.setPadding(16, 16, 16, 16);
         editText.requestFocus();
         return editText;
@@ -215,6 +249,13 @@ public class AddRecipeActivity extends AppCompatActivity {
             }
         }
         return listOfIngredients;
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putParcelable("image", imageUri);
+        outState.putStringArrayList("listIngr",getIngredients());
+        super.onSaveInstanceState(outState);
     }
 }
 

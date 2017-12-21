@@ -10,7 +10,6 @@
     android:id="@+id/cont"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fitsSystemWindows="true"
 >
 
     <ImageButton
@@ -32,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:background="@drawable/rounded_edittext"
+        android:background="@drawable/rounded_edittext2"
         android:inputType="text"
         app:layout_constraintTop_toBottomOf="@+id/title"
         tools:ignore="LabelFor" />
@@ -55,11 +54,12 @@
             android:orientation="horizontal">
             <EditText
                 android:id="@+id/ingr1Text"
-                android:layout_width="340dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.95"
                 android:padding="8dp"
                 android:inputType="text"
-                android:background="@drawable/rounded_edittext"
+                android:background="@drawable/rounded_edittext2"
                 tools:ignore="LabelFor" />
             <ImageButton
                 android:id="@+id/add1Btn"
