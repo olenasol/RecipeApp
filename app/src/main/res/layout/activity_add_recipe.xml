@@ -6,79 +6,83 @@
     android:layout_height="match_parent"
     tools:context="com.example.olena.recipeapp.activities.AddRecipeActivity">
 
-<android.support.constraint.ConstraintLayout
-    android:id="@+id/cont"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
->
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cont"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageButton
-        android:id="@+id/imageBtn"
-        android:layout_width="match_parent"
-        android:layout_height="100pt"
-        android:src="@mipmap/add_btn"
-        android:contentDescription="@string/image_goes_here"
-        />
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/imageBtn"/>
-    <EditText
-        android:id="@+id/titleEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="@drawable/rounded_edittext2"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        tools:ignore="LabelFor" />
-    <TextView
-        android:id="@+id/ingredients"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ingredients"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/titleEdit"/>
-    <LinearLayout
-        android:id="@+id/ingrLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/ingredients"
-        android:orientation="vertical">
-        <LinearLayout
+        <ImageButton
+            android:id="@+id/imageBtn"
+            android:layout_width="match_parent"
+            android:layout_height="100pt"
+            android:src="@mipmap/add_btn"
+            android:contentDescription="@string/image_goes_here" />
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <EditText
-                android:id="@+id/ingr1Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.95"
-                android:padding="8dp"
-                android:inputType="text"
-                android:background="@drawable/rounded_edittext2"
-                tools:ignore="LabelFor" />
-            <ImageButton
-                android:id="@+id/add1Btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:contentDescription="@string/plus_image"
-                android:src="@mipmap/ic_add_black_24dp"
-                android:background="@color/white"
-                />
-        </LinearLayout>
-    </LinearLayout>
-    <Button
-        android:id="@+id/submitBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        app:layout_constraintTop_toBottomOf="@+id/ingrLayout"
-        />
+            android:text="@string/title"
+            android:textSize="24sp"
+            app:layout_constraintTop_toBottomOf="@+id/imageBtn" />
 
-</android.support.constraint.ConstraintLayout>
+        <EditText
+            android:id="@+id/titleEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="@drawable/rounded_edittext2"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ingredients"
+            android:textSize="24sp"
+            app:layout_constraintTop_toBottomOf="@+id/titleEdit" />
+
+        <LinearLayout
+            android:id="@+id/ingrLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/ingredients"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ingr1Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.95"
+                    android:padding="8dp"
+                    android:inputType="text"
+                    android:background="@drawable/rounded_edittext2"
+                    tools:ignore="LabelFor" />
+
+                <ImageButton
+                    android:id="@+id/add1Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:contentDescription="@string/plus_image"
+                    android:src="@mipmap/ic_add_black_24dp"
+                    android:background="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            app:layout_constraintTop_toBottomOf="@+id/ingrLayout" />
+
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>

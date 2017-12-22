@@ -10,5 +10,5 @@
         android:id="@+id/progressBar"
         android:indeterminate="true"
         style="@android:style/Widget.Holo.ProgressBar"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

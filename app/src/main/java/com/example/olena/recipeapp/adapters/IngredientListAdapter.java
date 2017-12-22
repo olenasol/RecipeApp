@@ -2,9 +2,7 @@ package com.example.olena.recipeapp.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.olena.recipeapp.R;
 
@@ -20,7 +18,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientHolder
 
     @Override
     public IngredientHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new IngredientHolder( LayoutInflater.from(parent.getContext())
+        return new IngredientHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.ingredient_item, parent, false));
     }
 

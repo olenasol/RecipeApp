@@ -11,14 +11,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class ImageProvider {
 
-    public static File getImageFile(Bitmap bitmap, Context context){
-        File  storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    public static File getImageFile(Bitmap bitmap, Context context) {
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
         String imageFileName = "JPEGImage";
         File file = null;
@@ -28,7 +25,7 @@ public class ImageProvider {
                     ".jpg",
                     storageDir
             );
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -56,18 +53,19 @@ public class ImageProvider {
                     e.printStackTrace();
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return file;
     }
 
-    public static class GetImageAsync extends AsyncTask<String,Void,Bitmap> {
+    public static class GetImageAsync extends AsyncTask<String, Void, Bitmap> {
         @Override
-        protected Bitmap doInBackground(String...str) {
+        protected Bitmap doInBackground(String... str) {
 
             return getBitmapFromURL(str[0]);
         }
+
         Bitmap getBitmapFromURL(String src) {
 
             try {

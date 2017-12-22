@@ -4,18 +4,19 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:padding="10dp"
-    >
-   <ImageButton
-       android:id="@+id/openCameraBtn"
-       android:layout_width="150dp"
-       android:layout_height="150dp"
-       android:src="@drawable/ic_menu_camera"
-       android:contentDescription="@string/photo_im"/>
+    android:padding="10dp">
+
+    <ImageButton
+        android:id="@+id/openCameraBtn"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_menu_camera"
+        android:contentDescription="@string/photo_im" />
+
     <ImageButton
         android:id="@+id/openGalleryBtn"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/ic_menu_gallery"
-        android:contentDescription="@string/gallery_image"/>
+        android:contentDescription="@string/gallery_image" />
 </LinearLayout>

@@ -4,6 +4,6 @@ import com.example.olena.recipeapp.adapters.RecipeHolder;
 import com.example.olena.recipeapp.adapters.RecipeListAdapter;
 
 
-public interface RecipeItemClickListener  {
+public interface RecipeItemClickListener {
     void onRecipeItemClick(RecipeHolder holder, int position, RecipeListAdapter adapter);
 }

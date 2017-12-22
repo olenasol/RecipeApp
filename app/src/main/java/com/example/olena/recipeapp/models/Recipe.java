@@ -22,7 +22,7 @@ public class Recipe implements Parcelable {
 
     private ArrayList<String> listOfIngredients;
 
-    public Recipe(String recipeId, String title, String publisher, String imageUrl, String sourceUrl,double socialRank) {
+    public Recipe(String recipeId, String title, String publisher, String imageUrl, String sourceUrl, double socialRank) {
         this.recipeId = recipeId;
         this.title = title;
         this.publisher = publisher;
@@ -50,12 +50,13 @@ public class Recipe implements Parcelable {
     public void setListOfIngredients(ArrayList<String> listOfIngredients) {
         this.listOfIngredients = listOfIngredients;
     }
-    public String getListOfIngredientsString(){
+
+    public String getListOfIngredientsString() {
         StringBuilder s = new StringBuilder("");
-        for(String ing:listOfIngredients){
+        for (String ing : listOfIngredients) {
             s.append(ing).append(", ");
         }
-        s.replace(s.length()-2,s.length(),".");
+        s.replace(s.length() - 2, s.length(), ".");
         return s.toString();
     }
 
@@ -96,6 +97,7 @@ public class Recipe implements Parcelable {
         dest.writeDouble(this.socialRank);
         dest.writeStringList(this.listOfIngredients);
     }
+
     public static final Parcelable.Creator<Recipe> CREATOR = new Parcelable.Creator<Recipe>() {
         public Recipe createFromParcel(Parcel in) {
             return new Recipe(in);

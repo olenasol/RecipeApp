@@ -13,12 +13,9 @@ import android.view.animation.LinearInterpolator;
 public class ScrollAwareFABBehavior extends CoordinatorLayout.Behavior<FloatingActionButton> {
 
 
-
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
     }
-
-
 
 
     @Override

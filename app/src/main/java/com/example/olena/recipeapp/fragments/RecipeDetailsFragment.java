@@ -1,23 +1,14 @@
 package com.example.olena.recipeapp.fragments;
 
 
-import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
-import android.support.v4.app.SharedElementCallback;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import android.transition.Transition;
-import android.transition.TransitionListenerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +21,6 @@ import com.example.olena.recipeapp.R;
 import com.example.olena.recipeapp.activities.MainNavActivity;
 import com.example.olena.recipeapp.adapters.IngredientListAdapter;
 import com.example.olena.recipeapp.adapters.RecipeListAdapter;
-
 import com.example.olena.recipeapp.models.Recipe;
 import com.example.olena.recipeapp.socialsitesmanagers.FacebookManager;
 import com.example.olena.recipeapp.socialsitesmanagers.TwitterManager;
@@ -41,6 +31,7 @@ import java.util.ArrayList;
 
 public class RecipeDetailsFragment extends Fragment {
 
+    public static final String ARGS_LIST = "args_list";
 
     private String transactionName;
     private TextView titleTxt;
@@ -56,7 +47,7 @@ public class RecipeDetailsFragment extends Fragment {
         list.addAll(adapter.getListOfRecipes());
         Bundle args = new Bundle();
         args.putInt("position", position);
-        args.putParcelableArrayList("list", list);
+        args.putParcelableArrayList(ARGS_LIST, list);
         myFragment.setArguments(args);
 
         return myFragment;
@@ -68,7 +59,7 @@ public class RecipeDetailsFragment extends Fragment {
 
         twitterManager = new TwitterManager(getContext());
         if ((getActivity()) != null) {
-            ((MainNavActivity)getActivity()).setSearchGone();
+            ((MainNavActivity) getActivity()).setSearchGone();
         }
 
     }
@@ -80,7 +71,7 @@ public class RecipeDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.recipe_details, container, false);
 
         titleTxt = view.findViewById(R.id.titleTxt);
-        authorTxt =  view.findViewById(R.id.authorTxt);
+        authorTxt = view.findViewById(R.id.authorTxt);
         imageView = view.findViewById(R.id.imageView);
         goBackBtn = view.findViewById(R.id.goBackBtn);
         recyclerViewIngr = view.findViewById(R.id.rec_view_ingredients);
@@ -122,12 +113,11 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
 
-
     public void setTransactionName(String transactionName) {
         this.transactionName = transactionName;
     }
 
-    private void fillFields(){
+    private void fillFields() {
         final ArrayList<Recipe> listOfRecipes = getArguments().getParcelableArrayList("list");
         final int position = getArguments().getInt("position");
         titleTxt.setText(listOfRecipes.get(position).getTitle());
@@ -144,12 +134,11 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(getActivity() != null){
+        if (getActivity() != null) {
             int orientation = getActivity().getResources().getConfiguration().orientation;
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
-            else{
+            } else {
                 getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
         }
@@ -158,15 +147,15 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(getActivity() != null){
+        if (getActivity() != null) {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         }
     }
-    private void getBackVisible(){
-        if(goBackBtn.getVisibility()==View.GONE) {
+
+    private void getBackVisible() {
+        if (goBackBtn.getVisibility() == View.GONE) {
             goBackBtn.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             goBackBtn.setVisibility(View.GONE);
         }
     }

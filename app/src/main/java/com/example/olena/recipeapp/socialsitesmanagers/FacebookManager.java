@@ -23,19 +23,22 @@ public class FacebookManager {
     }
 
     public static boolean isLoggedIn() {
-        return AccessToken.getCurrentAccessToken() != null && Profile.getCurrentProfile()!=null;
-    }
-    public String getProfileFirstName(){
-        return  Profile.getCurrentProfile().getFirstName();
-    }
-    public String getProfileLastName(){
-        return  Profile.getCurrentProfile().getLastName();
-    }
-    public Uri getProfilePictureUri(){
-        return Profile.getCurrentProfile().getProfilePictureUri(200,200);
+        return AccessToken.getCurrentAccessToken() != null && Profile.getCurrentProfile() != null;
     }
 
-    public void postToFacebook(String imageUrl, String title, String listOfIngr){
+    public String getProfileFirstName() {
+        return Profile.getCurrentProfile().getFirstName();
+    }
+
+    public String getProfileLastName() {
+        return Profile.getCurrentProfile().getLastName();
+    }
+
+    public Uri getProfilePictureUri() {
+        return Profile.getCurrentProfile().getProfilePictureUri(200, 200);
+    }
+
+    public void postToFacebook(String imageUrl, String title, String listOfIngr) {
 
         ImageProvider.GetImageAsync task = new ImageProvider.GetImageAsync();
         task.execute(imageUrl);
@@ -53,7 +56,7 @@ public class FacebookManager {
             ShareOpenGraphObject obj = new ShareOpenGraphObject.Builder()
                     .putString("og:type", "object")
                     .putString("og:title", title)
-                    .putString("og:description",listOfIngr)
+                    .putString("og:description", listOfIngr)
                     .putPhoto("og:image", photo)
                     .build();
 
@@ -67,8 +70,7 @@ public class FacebookManager {
                     .build();
             ShareDialog.show((Activity) context, content);
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

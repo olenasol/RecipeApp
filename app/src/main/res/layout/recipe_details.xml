@@ -6,23 +6,22 @@
     android:layout_height="match_parent"
 
     >
-<android.support.constraint.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:foreground="@drawable/gradient"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                android:contentDescription="@string/recipe_image"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:foreground="@drawable/gradient"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:contentDescription="@string/recipe_image"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
 
         <ImageButton
             android:id="@+id/goBackBtn"
@@ -35,41 +34,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/authorTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="@string/author"
-                app:layout_constraintBottom_toTopOf="@+id/titleTxt"
-                app:layout_constraintStart_toStartOf="@id/imageView"
-                tools:layout_editor_absoluteX="16dp" />
-            <TextView
-                android:id="@+id/titleTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="@string/title"
-                android:textSize="@dimen/text_size"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"/>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rec_view_ingredients"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"/>
-            <Button
-                android:id="@+id/shareFacebookBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/share"
-                app:layout_constraintTop_toBottomOf="@+id/rec_view_ingredients"/>
+        <TextView
+            android:id="@+id/authorTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/author"
+            app:layout_constraintBottom_toTopOf="@+id/titleTxt"
+            app:layout_constraintStart_toStartOf="@id/imageView"
+            tools:layout_editor_absoluteX="16dp" />
 
-            <Button
-                android:id="@+id/shareTwitterBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/twitter"
-                app:layout_constraintTop_toBottomOf="@+id/shareFacebookBtn"/>
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/titleTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/title"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rec_view_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <Button
+            android:id="@+id/shareFacebookBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/share"
+            app:layout_constraintTop_toBottomOf="@+id/rec_view_ingredients" />
+
+        <Button
+            android:id="@+id/shareTwitterBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/twitter"
+            app:layout_constraintTop_toBottomOf="@+id/shareFacebookBtn" />
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>

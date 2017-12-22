@@ -8,5 +8,5 @@
         android:fillColor="@color/gray"
         android:strokeColor="@color/gray"
         android:strokeWidth="4"
-        android:pathData="M0,550 h500,0 l150,-250 l-150,-250 l-500,0Z"/>
+        android:pathData="M0,550 h500,0 l150,-250 l-150,-250 l-500,0Z" />
 </vector>

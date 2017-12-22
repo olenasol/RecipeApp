@@ -19,8 +19,8 @@ import com.squareup.picasso.Picasso;
 
 public class ProfileFragment extends Fragment {
 
-    private  TextView userNameTxt;
-    private  TextView userSurnameTxT;
+    private TextView userNameTxt;
+    private TextView userSurnameTxT;
     private ImageView profilePic;
 
     public ProfileFragment() {
@@ -48,7 +48,8 @@ public class ProfileFragment extends Fragment {
 
         return view;
     }
-    private void fillProfile(){
+
+    private void fillProfile() {
         FacebookManager facebookManager = new FacebookManager(getContext());
         String name = "Name: " + facebookManager.getProfileFirstName();
         String surname = "Surname: " + facebookManager.getProfileLastName();
@@ -56,8 +57,9 @@ public class ProfileFragment extends Fragment {
         userSurnameTxT.setText(surname);
         Picasso.with(getContext()).load(facebookManager.getProfilePictureUri()).into(profilePic);
     }
-    private  void goToMainActivity(){
-        Intent intent = new Intent(getContext(),MainNavActivity.class);
+
+    private void goToMainActivity() {
+        Intent intent = new Intent(getContext(), MainNavActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

@@ -22,7 +22,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final RecipeItemClickListener recipeItemClickListener;
     private Context context;
 
-    public RecipeListAdapter(List<Recipe> listOfRecipes,RecipeItemClickListener recipeItemClickListener) {
+    public RecipeListAdapter(List<Recipe> listOfRecipes, RecipeItemClickListener recipeItemClickListener) {
         this.listOfRecipes = listOfRecipes;
         this.recipeItemClickListener = recipeItemClickListener;
 
@@ -35,13 +35,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
-        if(viewType==VIEW_ITEM) {
+        if (viewType == VIEW_ITEM) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recipe_item, parent, false);
             context = parent.getContext();
-           vh = new RecipeHolder(view);
-        }
-        else {
+            vh = new RecipeHolder(view);
+        } else {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.progress_item, parent, false);
 
@@ -51,39 +50,39 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder,  int position) {
-        if(holder instanceof RecipeHolder) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof RecipeHolder) {
             ((RecipeHolder) holder).getTitleTxt().setText(listOfRecipes.get(position).getTitle());
             ((RecipeHolder) holder).getPublisherTxt().setText(listOfRecipes.get(position).getPublisher());
             Picasso.with(context).load(listOfRecipes.get(position).getImageUrl()).into(((RecipeHolder) holder).getImageView());
-            if(listOfRecipes.get(position).getSocialRank() == 100){
+            if (listOfRecipes.get(position).getSocialRank() == 100) {
                 String str = " Popular";
-                ((RecipeHolder)holder).getTrandingTxt().setText(str);
-                ((RecipeHolder)holder).getTrandingTxt().setVisibility(View.VISIBLE);
+                ((RecipeHolder) holder).getTrandingTxt().setText(str);
+                ((RecipeHolder) holder).getTrandingTxt().setVisibility(View.VISIBLE);
 
             }
             ViewCompat.setTransitionName(((RecipeHolder) holder).getImageView(), String.valueOf(position) + "_image");
-            ((RecipeHolder)holder).getCardView().setOnClickListener(new View.OnClickListener() {
+            ((RecipeHolder) holder).getCardView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    recipeItemClickListener.onRecipeItemClick(((RecipeHolder)holder),(holder).getAdapterPosition(),RecipeListAdapter.this);
+                    recipeItemClickListener.onRecipeItemClick(((RecipeHolder) holder), (holder).getAdapterPosition(), RecipeListAdapter.this);
                 }
             });
-        }
-        else {
-            ((ProgressViewHolder)holder).getProgressBar().setIndeterminate(true);
+        } else {
+            ((ProgressViewHolder) holder).getProgressBar().setIndeterminate(true);
         }
     }
 
-    public void addDataToListOfRecipes(List<Recipe> additionalList){
+    public void addDataToListOfRecipes(List<Recipe> additionalList) {
         listOfRecipes.addAll(additionalList);
         notifyDataSetChanged();
     }
 
-    public void addElementToListOfRecipes(Recipe recipe){
+    public void addElementToListOfRecipes(Recipe recipe) {
         listOfRecipes.add(recipe);
     }
-    public void removeLastFromListOfRecipes(){
+
+    public void removeLastFromListOfRecipes() {
         listOfRecipes.remove(listOfRecipes.size() - 1);
     }
 
@@ -95,9 +94,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(int position) {
         int VIEW_PROG = 0;
-        return listOfRecipes.get(position)!=null? VIEW_ITEM: VIEW_PROG;
+        return listOfRecipes.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
-
 
 
 }

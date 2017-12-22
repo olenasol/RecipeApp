@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainNavActivity extends AppCompatActivity
-       {
+public class MainNavActivity extends AppCompatActivity {
     private boolean isTypedIn = false;
     private boolean isSearched = false;
     private EditText editText;
@@ -40,11 +39,10 @@ public class MainNavActivity extends AppCompatActivity
         if (savedInstanceState != null) {
 
             Fragment fragment = getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
-            if (fragment instanceof RecyclerViewFragment){
-               recyclerViewFragment = (RecyclerViewFragment) fragment;
+            if (fragment instanceof RecyclerViewFragment) {
+                recyclerViewFragment = (RecyclerViewFragment) fragment;
             }
-        }
-        else {
+        } else {
 
             getNewRecipe();
             startMainFragment();
@@ -66,7 +64,7 @@ public class MainNavActivity extends AppCompatActivity
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(count==1) {
+                if (count == 1) {
                     searchWhenIdle();
                 }
 
@@ -79,7 +77,7 @@ public class MainNavActivity extends AppCompatActivity
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()==0&&isTypedIn&&isSearched){
+                if (s.length() == 0 && isTypedIn && isSearched) {
                     startMainFragment();
                     isTypedIn = false;
                     isSearched = false;
@@ -99,19 +97,20 @@ public class MainNavActivity extends AppCompatActivity
 
     }
 
-    private void startMainFragment(){
+    private void startMainFragment() {
         recyclerViewFragment = new RecyclerViewFragment();
         RecyclerViewFragment.setListOfRecipes(null);
         recyclerViewFragment.setSearch(false);
         recyclerViewFragment.setSearchString("");
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container,recyclerViewFragment,"REC_FRAG");
+        fragmentTransaction.replace(R.id.fragment_container, recyclerViewFragment, "REC_FRAG");
         fragmentTransaction.commit();
     }
-    private void startSearchFragment(){
+
+    private void startSearchFragment() {
         String str = editText.getText().toString();
-        if(!str.equals("")){
+        if (!str.equals("")) {
             recyclerViewFragment = new RecyclerViewFragment();
             RecyclerViewFragment.setListOfRecipes(null);
             recyclerViewFragment.setSearch(true);
@@ -119,28 +118,29 @@ public class MainNavActivity extends AppCompatActivity
             getSupportFragmentManager()
                     .beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragment_container, recyclerViewFragment,"REC_FRAG")
+                    .replace(R.id.fragment_container, recyclerViewFragment, "REC_FRAG")
                     .commit();
         }
     }
 
-    private void getNewRecipe(){
+    private void getNewRecipe() {
         Recipe recipe = getIntent().getParcelableExtra("new_recipe");
-        if(recipe!=null) {
+        if (recipe != null) {
             listOfNewRecipies.add(0, recipe);
         }
 
     }
 
-    public void setSearchVisible(){
-        if((editText!=null)&&(deleteBtn!=null)) {
+    public void setSearchVisible() {
+        if ((editText != null) && (deleteBtn != null)) {
             editText.setVisibility(View.VISIBLE);
 
             deleteBtn.setVisibility(View.VISIBLE);
         }
     }
-    public void setSearchGone(){
-        if((editText!=null)&&(deleteBtn!=null)) {
+
+    public void setSearchGone() {
+        if ((editText != null) && (deleteBtn != null)) {
             editText.setVisibility(View.GONE);
             deleteBtn.setVisibility(View.GONE);
         }
@@ -151,18 +151,19 @@ public class MainNavActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, "myFragmentName", recyclerViewFragment);
     }
-    private void searchWhenIdle(){
+
+    private void searchWhenIdle() {
         isTypedIn = true;
 
-        if(timer != null) {
+        if (timer != null) {
             timer.cancel();
         }
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                    isSearched = true;
-                    startSearchFragment();
+                isSearched = true;
+                startSearchFragment();
             }
 
         }, 2000);

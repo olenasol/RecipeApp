@@ -12,6 +12,7 @@ public interface RecipeClient {
 
     @GET("/api/search")
     Call<RecipeBundle> getRecipe(@Query("key") String key, @Query("page") String pageNumber);
+
     @GET("/api/search")
-    Call<RecipeBundle> getRecipe(@Query("key") String key,@Query("q") String query, @Query("page") String pageNumber);
+    Call<RecipeBundle> getRecipe(@Query("key") String key, @Query("q") String query, @Query("page") String pageNumber);
 }

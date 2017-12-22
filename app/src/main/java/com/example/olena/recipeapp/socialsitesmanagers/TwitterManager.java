@@ -29,7 +29,7 @@ public class TwitterManager {
         initTwitter(context);
     }
 
-    private void initTwitter(Context context){
+    private void initTwitter(Context context) {
         Twitter.initialize(context);
         TwitterConfig config = new TwitterConfig.Builder(context)
                 .logger(new DefaultLogger(Log.DEBUG))
@@ -38,37 +38,38 @@ public class TwitterManager {
                 .build();
         Twitter.initialize(config);
     }
-    private void makeShare(Uri imagePath,String text){
-        if(context !=null)
-            if (imagePath != null){
+
+    private void makeShare(Uri imagePath, String text) {
+        if (context != null)
+            if (imagePath != null) {
                 TweetComposer.Builder builder = new TweetComposer.Builder(context)
                         //.text(adapter.getListOfRecipes().get(position).getListOfIngredientsString())
                         .text(text)
                         .image(imagePath);
                 builder.show();
-            }else {
+            } else {
                 TweetComposer.Builder builder = new TweetComposer.Builder(context)
                         .text(text);
                 builder.show();
             }
     }
 
-    public void postToTwitter(String imageUrl, final String text){
+    public void postToTwitter(String imageUrl, final String text) {
         TweetComposer.getInstance();
         Picasso.with(context)
-               // .load(adapter.getListOfRecipes().get(position).getImageUrl())
+                // .load(adapter.getListOfRecipes().get(position).getImageUrl())
                 .load(imageUrl)
                 .into(new Target() {
                           @Override
                           public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
-                              File file = ImageProvider.getImageFile(bitmap,context);
+                              File file = ImageProvider.getImageFile(bitmap, context);
 
                               if (file != null)
-                                  if(context!=null)
-                                      makeShare(FileProvider.getUriForFile(context, "com.example.android.fileprovider", file),text);
+                                  if (context != null)
+                                      makeShare(FileProvider.getUriForFile(context, "com.example.android.fileprovider", file), text);
                                   else
-                                      makeShare(null,"");
+                                      makeShare(null, "");
                           }
 
                           @Override

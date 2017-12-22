@@ -4,9 +4,11 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-feature android:name="android.hardware.camera"
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -19,9 +21,11 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <provider android:authorities="com.facebook.app.FacebookContentProvider495296340851928"
+
+        <provider
+            android:authorities="com.facebook.app.FacebookContentProvider495296340851928"
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:exported="true" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.android.fileprovider"
@@ -29,7 +33,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity
@@ -52,8 +56,7 @@
         <activity
             android:name=".activities.AddRecipeActivity"
             android:windowSoftInputMode="adjustResize"
-            android:configChanges="orientation|keyboardHidden"
-            />
+            android:configChanges="orientation|keyboardHidden" />
     </application>
 
 </manifest>

@@ -2,17 +2,15 @@ package com.example.olena.recipeapp.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +67,8 @@ public class AddRecipeActivity extends AppCompatActivity {
         onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 hideLastPlusSign();
-                 addNewEditText("");
+                hideLastPlusSign();
+                addNewEditText("");
 
             }
         };
@@ -86,8 +84,8 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     }
 
-    private void changedRotationSaved(Bundle savedInstanceState){
-        if(savedInstanceState != null) {
+    private void changedRotationSaved(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
             imageUri = savedInstanceState.getParcelable("image");
             ArrayList<String> listOfIngredients = savedInstanceState.getStringArrayList("listIngr");
             hideLastPlusSign();
@@ -100,14 +98,16 @@ public class AddRecipeActivity extends AppCompatActivity {
             selectImageBtn.setImageURI(imageUri);
         }
     }
-    private void addRecipe(){
+
+    private void addRecipe() {
         Recipe recipe = new Recipe("0", titleEditTxt.getText().toString(), Profile.getCurrentProfile().getName(), imageUri.toString(), "", 0);
         recipe.setListOfIngredients(getIngredients());
-        Intent intent = new Intent(AddRecipeActivity.this,MainNavActivity.class);
-        intent.putExtra("new_recipe",recipe);
+        Intent intent = new Intent(AddRecipeActivity.this, MainNavActivity.class);
+        intent.putExtra("new_recipe", recipe);
         startActivity(intent);
     }
-    private void createAlertDialog(){
+
+    private void createAlertDialog() {
         final AlertDialog alertDialog = getDialogBuilder().create();
         alertDialog.show();
         ImageButton galleryImageBtn = alertDialog.findViewById(R.id.openGalleryBtn);
@@ -138,7 +138,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         horLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.addView(horLinearLayout);
         EditText editText = buildEditText();
-        if(!str.equals("")){
+        if (!str.equals("")) {
             editText.setText(str);
         }
         listOfEditTexts.add(editText);
@@ -146,25 +146,28 @@ public class AddRecipeActivity extends AppCompatActivity {
         horLinearLayout.addView(editText);
         horLinearLayout.addView(imageButton);
     }
-    private void hideLastPlusSign(){
+
+    private void hideLastPlusSign() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,1f);
-        EditText editText = listOfEditTexts.get(listOfEditTexts.size()-1);
+                ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        EditText editText = listOfEditTexts.get(listOfEditTexts.size() - 1);
         editText.setLayoutParams(params);
         LinearLayout horLinearLayout = (LinearLayout) editText.getParent();
         horLinearLayout.removeAllViews();
         horLinearLayout.addView(editText);
     }
-    private  EditText buildEditText(){
+
+    private EditText buildEditText() {
         EditText editText = new EditText(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,0.95f);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.95f);
         editText.setLayoutParams(params);
         editText.setBackgroundResource(R.drawable.rounded_edittext2);
         editText.setPadding(16, 16, 16, 16);
         editText.requestFocus();
         return editText;
     }
-    private ImageButton buildImageButton(){
+
+    private ImageButton buildImageButton() {
         ImageButton imageButton = new ImageButton(this);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         imageButton.setLayoutParams(params);
@@ -202,11 +205,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            photoFile = createImageFile();
             if (photoFile != null) {
                 imageUri = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
@@ -216,16 +215,23 @@ public class AddRecipeActivity extends AppCompatActivity {
             }
         }
     }
-    private File createImageFile() throws IOException {
+
+    private File createImageFile() {
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        return File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
+        try {
+            return File.createTempFile(
+                    imageFileName,
+                    ".jpg",
+                    storageDir
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("ff", "fff");
+            return null;
+        }
     }
 
 
@@ -240,21 +246,22 @@ public class AddRecipeActivity extends AppCompatActivity {
         return builder;
     }
 
-    private ArrayList<String> getIngredients(){
+    private ArrayList<String> getIngredients() {
         ArrayList<String> listOfIngredients = new ArrayList<>();
         listOfIngredients.add(firstIngredientEdit.getText().toString());
-        for(int i=0;i<listOfEditTexts.size();i++){
-            if(!listOfEditTexts.get(i).getText().toString().equals("")) {
+        for (int i = 0; i < listOfEditTexts.size(); i++) {
+            if (!listOfEditTexts.get(i).getText().toString().equals("")) {
                 listOfIngredients.add(listOfEditTexts.get(i).getText().toString());
             }
         }
         return listOfIngredients;
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
         outState.putParcelable("image", imageUri);
-        outState.putStringArrayList("listIngr",getIngredients());
+        outState.putStringArrayList("listIngr", getIngredients());
         super.onSaveInstanceState(outState);
     }
 }

@@ -11,5 +11,5 @@
         android:layout_height="wrap_content"
         android:src="@drawable/resultsfound"
         android:layout_gravity="center"
-        android:contentDescription="@string/no_result_image"/>
+        android:contentDescription="@string/no_result_image" />
 </FrameLayout>

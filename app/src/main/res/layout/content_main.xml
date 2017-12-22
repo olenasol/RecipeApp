@@ -8,6 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.olena.recipeapp.activities.MainNavActivity"
     tools:showIn="@layout/activity_main">
+
     <EditText
         android:id="@+id/searchEdit"
         android:layout_width="match_parent"
@@ -17,8 +18,7 @@
         android:paddingStart="15dp"
         android:background="@drawable/edittextsearch"
         android:paddingEnd="0dp"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
     </EditText>
 
@@ -33,12 +33,13 @@
         app:layout_constraintTop_toTopOf="@+id/searchEdit"
         app:layout_constraintVertical_bias="0.418"
         android:contentDescription="@string/del_im"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <RelativeLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        app:layout_constraintTop_toBottomOf="@+id/searchEdit"/>
+        app:layout_constraintTop_toBottomOf="@+id/searchEdit" />
 
 </android.support.constraint.ConstraintLayout>

@@ -2,9 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-
+    android:layout_height="wrap_content">
 
 
     <android.support.constraint.ConstraintLayout
@@ -25,8 +23,8 @@
             android:text="@string/go_to_top"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
@@ -37,8 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:scrollbars="vertical"
-        />
+                android:scrollbars="vertical" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.constraint.ConstraintLayout>
@@ -52,6 +49,6 @@
         app:borderWidth="0dp"
         app:layout_anchor="@id/recyclerView"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_behavior="com.example.olena.recipeapp.behaviorclasses.ScrollAwareFABBehavior"/>
+        app:layout_behavior="com.example.olena.recipeapp.behaviorclasses.ScrollAwareFABBehavior" />
 
-    </android.support.design.widget.CoordinatorLayout>
+</android.support.design.widget.CoordinatorLayout>
