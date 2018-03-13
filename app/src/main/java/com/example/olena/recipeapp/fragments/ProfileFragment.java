@@ -60,7 +60,8 @@ public class ProfileFragment extends Fragment {
 
     private void goToMainActivity() {
         Intent intent = new Intent(getContext(), MainNavActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

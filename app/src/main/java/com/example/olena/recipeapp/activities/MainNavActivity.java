@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import com.example.olena.recipeapp.R;
 import com.example.olena.recipeapp.fragments.RecyclerViewFragment;
 import com.example.olena.recipeapp.models.Recipe;
+import com.example.olena.recipeapp.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -27,23 +28,26 @@ public class MainNavActivity extends AppCompatActivity {
     private RecyclerViewFragment recyclerViewFragment;
     private ImageButton deleteBtn;
     private Timer timer;
-    public static ArrayList<Recipe> listOfNewRecipies = new ArrayList<>();
+    private static ArrayList<Recipe> listOfNewRecipies = new ArrayList<>();
+
+    public ArrayList<Recipe> getListOfNewRecipies() {
+        return listOfNewRecipies;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //postponeEnterTransition();
         editText = findViewById(R.id.searchEdit);
         deleteBtn = findViewById(R.id.deleteBtn);
         if (savedInstanceState != null) {
 
-            Fragment fragment = getSupportFragmentManager().getFragment(savedInstanceState, "myFragmentName");
+            Fragment fragment = getSupportFragmentManager().getFragment(savedInstanceState,
+                    Constants.MY_FRAGMENT_NAME);
             if (fragment instanceof RecyclerViewFragment) {
                 recyclerViewFragment = (RecyclerViewFragment) fragment;
             }
         } else {
-
             getNewRecipe();
             startMainFragment();
         }
@@ -99,12 +103,11 @@ public class MainNavActivity extends AppCompatActivity {
 
     private void startMainFragment() {
         recyclerViewFragment = new RecyclerViewFragment();
-        RecyclerViewFragment.setListOfRecipes(null);
         recyclerViewFragment.setSearch(false);
         recyclerViewFragment.setSearchString("");
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, recyclerViewFragment, "REC_FRAG");
+        fragmentTransaction.replace(R.id.fragment_container, recyclerViewFragment);
         fragmentTransaction.commit();
     }
 
@@ -112,23 +115,14 @@ public class MainNavActivity extends AppCompatActivity {
         String str = editText.getText().toString();
         if (!str.equals("")) {
             recyclerViewFragment = new RecyclerViewFragment();
-            RecyclerViewFragment.setListOfRecipes(null);
             recyclerViewFragment.setSearch(true);
             recyclerViewFragment.setSearchString(str);
             getSupportFragmentManager()
                     .beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragment_container, recyclerViewFragment, "REC_FRAG")
+                    .replace(R.id.fragment_container, recyclerViewFragment)
                     .commit();
         }
-    }
-
-    private void getNewRecipe() {
-        Recipe recipe = getIntent().getParcelableExtra("new_recipe");
-        if (recipe != null) {
-            listOfNewRecipies.add(0, recipe);
-        }
-
     }
 
     public void setSearchVisible() {
@@ -149,7 +143,8 @@ public class MainNavActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        getSupportFragmentManager().putFragment(outState, "myFragmentName", recyclerViewFragment);
+        getSupportFragmentManager().putFragment(outState, Constants.MY_FRAGMENT_NAME,
+                recyclerViewFragment);
     }
 
     private void searchWhenIdle() {
@@ -177,11 +172,17 @@ public class MainNavActivity extends AppCompatActivity {
 
         if (count == 0) {
             super.onBackPressed();
-            //additional code
         } else {
             getFragmentManager().popBackStack();
         }
-
     }
 
+
+    private void getNewRecipe() {
+        Recipe recipe = getIntent().getParcelableExtra(Constants.NEW_RECIPE);
+        if (recipe != null) {
+            listOfNewRecipies.add(0, recipe);
+        }
+
+    }
 }

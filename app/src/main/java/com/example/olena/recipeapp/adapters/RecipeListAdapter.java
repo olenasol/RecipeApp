@@ -11,13 +11,14 @@ import android.view.ViewGroup;
 import com.example.olena.recipeapp.R;
 import com.example.olena.recipeapp.interfaces.RecipeItemClickListener;
 import com.example.olena.recipeapp.models.Recipe;
+import com.example.olena.recipeapp.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int VIEW_ITEM = 1;
+
     private List<Recipe> listOfRecipes;
     private final RecipeItemClickListener recipeItemClickListener;
     private Context context;
@@ -35,7 +36,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
-        if (viewType == VIEW_ITEM) {
+        if (viewType == Constants.VIEW_ITEM) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.recipe_item, parent, false);
             context = parent.getContext();
@@ -55,7 +56,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ((RecipeHolder) holder).getTitleTxt().setText(listOfRecipes.get(position).getTitle());
             ((RecipeHolder) holder).getPublisherTxt().setText(listOfRecipes.get(position).getPublisher());
             Picasso.with(context).load(listOfRecipes.get(position).getImageUrl()).into(((RecipeHolder) holder).getImageView());
-            if (listOfRecipes.get(position).getSocialRank() == 100) {
+            if (listOfRecipes.get(position).getSocialRank() == Constants.SOCIAL_RANK) {
                 String str = " Popular";
                 ((RecipeHolder) holder).getTrandingTxt().setText(str);
                 ((RecipeHolder) holder).getTrandingTxt().setVisibility(View.VISIBLE);
@@ -94,7 +95,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(int position) {
         int VIEW_PROG = 0;
-        return listOfRecipes.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+        return listOfRecipes.get(position) != null ? Constants.VIEW_ITEM : VIEW_PROG;
     }
 
 

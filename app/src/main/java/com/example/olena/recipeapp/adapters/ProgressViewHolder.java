@@ -9,7 +9,7 @@ import com.example.olena.recipeapp.R;
 class ProgressViewHolder extends RecyclerView.ViewHolder {
     private ProgressBar progressBar;
 
-    public ProgressBar getProgressBar() {
+    ProgressBar getProgressBar() {
         return progressBar;
     }
 

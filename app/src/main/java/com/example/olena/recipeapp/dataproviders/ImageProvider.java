@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
+
+import com.example.olena.recipeapp.utils.Constants;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,6 +29,7 @@ public class ImageProvider {
                     storageDir
             );
         } catch (IOException e) {
+            Log.e(Constants.TAG, "Error whan creating temporal file");
             e.printStackTrace();
         }
 
@@ -43,6 +47,7 @@ public class ImageProvider {
                 out = new FileOutputStream(file);
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             } catch (Exception e) {
+                Log.e(Constants.TAG, "Error whan creating compessing file");
                 e.printStackTrace();
             } finally {
                 try {
@@ -50,10 +55,12 @@ public class ImageProvider {
                         out.close();
                     }
                 } catch (IOException e) {
+                    Log.e(Constants.TAG, "Error whan closing file");
                     e.printStackTrace();
                 }
             }
         } catch (Exception e) {
+            Log.e(Constants.TAG, "Error whan getting file");
             e.printStackTrace();
         }
         return file;
@@ -72,6 +79,7 @@ public class ImageProvider {
                 URL url = new URL(src);
                 return BitmapFactory.decodeStream(url.openConnection().getInputStream());
             } catch (Exception e) {
+                Log.e(Constants.TAG, "Error whan decoding stream");
                 e.printStackTrace();
             }
             return null;

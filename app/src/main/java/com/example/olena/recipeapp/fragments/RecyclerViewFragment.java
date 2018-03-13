@@ -31,6 +31,7 @@ import com.example.olena.recipeapp.client.RecipeClient;
 import com.example.olena.recipeapp.interfaces.RecipeItemClickListener;
 import com.example.olena.recipeapp.models.Recipe;
 import com.example.olena.recipeapp.models.RecipeBundle;
+import com.example.olena.recipeapp.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+
+import static android.app.Activity.RESULT_OK;
 
 public class RecyclerViewFragment extends Fragment implements RecipeItemClickListener {
 
@@ -48,22 +51,21 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
     private RecipeListAdapter recipeListAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Button goToTopBtn;
-    private static int yPosition;
+    private int yPosition;
     private boolean isSearch;
     private String searchString;
-    private static ArrayList<Recipe> listOfRecipes;
+    private ArrayList<Recipe> listOfRecipes;
 
+    public RecyclerViewFragment() {
 
-    public static void setListOfRecipes(ArrayList<Recipe> listOfRecipes) {
-        RecyclerViewFragment.listOfRecipes = listOfRecipes;
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
-
         recyclerView = view.findViewById(R.id.recyclerView);
         FloatingActionButton fabPlus = view.findViewById(R.id.fab);
         goToTopBtn = view.findViewById(R.id.toTopBtn);
@@ -75,6 +77,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddRecipeActivity.class);
                 startActivity(intent);
+                //startActivityForResult(intent, Constants.REQUEST_NEW_RECIPE);
             }
         });
         goToTopBtn.setOnClickListener(new View.OnClickListener() {
@@ -101,13 +104,13 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         Retrofit retrofit = ApiClient.getClient();
         client = retrofit.create(RecipeClient.class);
         if (savedInstanceState != null) {
-            if (savedInstanceState.getParcelableArrayList("LIST_KEY") != null) {
+            if (savedInstanceState.getParcelableArrayList(Constants.LIST_KEY) != null) {
 
-                ArrayList<Recipe> list = savedInstanceState.getParcelableArrayList("LIST_KEY");
-                recipeListAdapter = new RecipeListAdapter(list, RecyclerViewFragment.this);
+                listOfRecipes = savedInstanceState.getParcelableArrayList(Constants.LIST_KEY);
+                recipeListAdapter = new RecipeListAdapter(listOfRecipes, RecyclerViewFragment.this);
                 recyclerView.setAdapter(recipeListAdapter);
             }
-            recyclerView.getLayoutManager().scrollToPosition(savedInstanceState.getInt("STATE"));
+            recyclerView.getLayoutManager().scrollToPosition(savedInstanceState.getInt(Constants.STATE));
 
         } else {
             loadFirstSetOfElements();
@@ -148,14 +151,13 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                listOfRecipes = null;
                 loadFirstSetOfElements();
                 swipeRefreshLayout.setRefreshing(false);
             }
         }, 2000);
     }
 
-    public boolean isSearch() {
+    private boolean isSearch() {
         return isSearch;
     }
 
@@ -163,7 +165,7 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         isSearch = search;
     }
 
-    public String getSearchString() {
+    private String getSearchString() {
         return searchString;
     }
 
@@ -177,8 +179,10 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         final RecipeDetailsFragment recipeDetails = RecipeDetailsFragment.newInstance(position, adapter);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             recipeDetails.setTransactionName(ViewCompat.getTransitionName(holder.getImageView()));
-            recipeDetails.setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
-            recipeDetails.setSharedElementReturnTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+            recipeDetails.setSharedElementEnterTransition(TransitionInflater.from(getContext())
+                    .inflateTransition(android.R.transition.move));
+            recipeDetails.setSharedElementReturnTransition(TransitionInflater.from(getContext())
+                    .inflateTransition(android.R.transition.move));
 
 
         }
@@ -192,7 +196,8 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         if (getActivity() != null)
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .addSharedElement(holder.getImageView(), ViewCompat.getTransitionName(holder.getImageView()))
+                    .addSharedElement(holder.getImageView(), ViewCompat.getTransitionName(holder
+                            .getImageView()))
                     .replace(R.id.fragment_container, recipeDetails)
                     .addToBackStack(null)
                     .commit();
@@ -239,22 +244,25 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
             ncall.enqueue(new Callback<RecipeBundle>() {
                 @Override
                 public void onResponse(@NonNull Call<RecipeBundle> call, @NonNull Response<RecipeBundle> response) {
-                    RecipeBundle recipeBundle = response.body();
-                    assert recipeBundle != null;
+                    if (response.body() != null) {
+                        RecipeBundle recipeBundle = response.body();
+                        assert recipeBundle != null;
 
-                    if (recipeBundle.getListOfRecipes().size() == 0) {
-                        startNoResultFragment();
+                        if (recipeBundle.getListOfRecipes().size() == 0) {
+                            startNoResultFragment();
+                        }
+                        listOfRecipes = recipeBundle.getListOfRecipes();
+                        addIngredientsToRecipes(listOfRecipes);
+
+
+                        for (int i = 0; i < ((MainNavActivity) getActivity()).getListOfNewRecipies().size(); i++) {
+                            listOfRecipes.add(i, ((MainNavActivity) getActivity()).getListOfNewRecipies().get(i));
+                        }
+
+                        recipeListAdapter = new RecipeListAdapter(listOfRecipes,
+                                RecyclerViewFragment.this);
+                        recyclerView.setAdapter(recipeListAdapter);
                     }
-                    listOfRecipes = recipeBundle.getListOfRecipes();
-                    addIngredientsToRecipes(listOfRecipes);
-
-                    for (int i = 0; i < MainNavActivity.listOfNewRecipies.size(); i++) {
-                        listOfRecipes.add(i, MainNavActivity.listOfNewRecipies.get(i));
-                    }
-
-                    recipeListAdapter = new RecipeListAdapter(listOfRecipes, RecyclerViewFragment.this);
-                    recyclerView.setAdapter(recipeListAdapter);
-
                 }
 
                 @Override
@@ -280,13 +288,14 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
                 ncall.enqueue(new Callback<RecipeBundle>() {
                     @Override
                     public void onResponse(@NonNull Call<RecipeBundle> call, @NonNull Response<RecipeBundle> response) {
+                        if (response.body() != null) {
+                            RecipeBundle recipeBundle = response.body();
+                            assert recipeBundle != null;
+                            listOfRecipes.addAll(recipeBundle.getListOfRecipes());
 
-                        RecipeBundle recipeBundle = response.body();
-                        assert recipeBundle != null;
-                        listOfRecipes.addAll(recipeBundle.getListOfRecipes());
-
-                        addIngredientsToRecipes(listOfRecipes);
-                        recipeListAdapter.addDataToListOfRecipes(recipeBundle.getListOfRecipes());
+                            addIngredientsToRecipes(listOfRecipes);
+                            recipeListAdapter.addDataToListOfRecipes(recipeBundle.getListOfRecipes());
+                        }
                     }
 
                     @Override
@@ -301,9 +310,9 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
     private Call<RecipeBundle> getCall(int currentPage) {
         Call<RecipeBundle> ncall;
         if (RecyclerViewFragment.this.isSearch()) {
-            ncall = client.getRecipe(RecipeClient.key, getSearchString(), Integer.valueOf(currentPage).toString());
+            ncall = client.getRecipe(Constants.KEY, getSearchString(), Integer.valueOf(currentPage).toString());
         } else {
-            ncall = client.getRecipe(RecipeClient.key, Integer.valueOf(currentPage).toString());
+            ncall = client.getRecipe(Constants.KEY, Integer.valueOf(currentPage).toString());
 
         }
         return ncall;
@@ -314,11 +323,27 @@ public class RecyclerViewFragment extends Fragment implements RecipeItemClickLis
         super.onSaveInstanceState(outState);
         ArrayList<Recipe> list = new ArrayList<>();
 
-        list.addAll(listOfRecipes);
-        outState.putParcelableArrayList("LIST_KEY", list);
+        list.addAll(recipeListAdapter.getListOfRecipes());
+        outState.putParcelableArrayList(Constants.LIST_KEY, list);
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        outState.putInt("STATE", linearLayoutManager.findFirstCompletelyVisibleItemPosition());
+        outState.putInt(Constants.STATE, linearLayoutManager.findFirstCompletelyVisibleItemPosition());
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == RESULT_OK) {
+//            if (requestCode == Constants.REQUEST_NEW_RECIPE) {
+//                Recipe recipe = data.getParcelableExtra(Constants.NEW_RECIPE);
+//                if (recipe != null) {
+//                    listOfRecipes.add(0, recipe);
+//                    goToTopBtn.performClick();
+//                    //refreshContent();
+//                    recyclerView.getAdapter().notifyDataSetChanged();
+//                }
+//            }
+//        }
+//    }
 
     private void addIngredientsToRecipes(ArrayList<Recipe> listOfRecipes) {
         ArrayList<String> listOfIngredients = new ArrayList<>();

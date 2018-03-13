@@ -26,11 +26,11 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
         trandingTxt = itemView.findViewById(R.id.trendingTxt);
     }
 
-    public TextView getTitleTxt() {
+    TextView getTitleTxt() {
         return titleTxt;
     }
 
-    public TextView getPublisherTxt() {
+    TextView getPublisherTxt() {
         return publisherTxt;
     }
 
@@ -38,11 +38,11 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
         return imageView;
     }
 
-    public TextView getTrandingTxt() {
+    TextView getTrandingTxt() {
         return trandingTxt;
     }
 
-    public CardView getCardView() {
+    CardView getCardView() {
         return cardView;
     }
 }

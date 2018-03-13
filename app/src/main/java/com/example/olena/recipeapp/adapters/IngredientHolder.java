@@ -11,7 +11,7 @@ class IngredientHolder extends RecyclerView.ViewHolder {
 
     private TextView ingredientTxt;
 
-    public TextView getIngredientTxt() {
+    TextView getIngredientTxt() {
         return ingredientTxt;
     }
 

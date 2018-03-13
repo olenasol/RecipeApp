@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 
 import com.example.olena.recipeapp.R;
 import com.example.olena.recipeapp.models.Recipe;
+import com.example.olena.recipeapp.utils.Constants;
 import com.facebook.Profile;
 
 import java.io.File;
@@ -34,23 +35,18 @@ import java.util.Locale;
 public class AddRecipeActivity extends AppCompatActivity {
 
     private ImageButton selectImageBtn;
-    private static final int GALLERY_REQUEST = 1;
-    private static final int CAMERA_REQUEST = 2;
     private Uri imageUri;
     private EditText firstIngredientEdit;
     private EditText titleEditTxt;
     private ArrayList<EditText> listOfEditTexts;
     private View.OnClickListener onClickListener;
 
-    public AddRecipeActivity() {
-        listOfEditTexts = new ArrayList<>();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
-
+        listOfEditTexts = new ArrayList<>();
         selectImageBtn = findViewById(R.id.imageBtn);
         titleEditTxt = findViewById(R.id.titleEdit);
         firstIngredientEdit = findViewById(R.id.ingr1Text);
@@ -86,13 +82,17 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     private void changedRotationSaved(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            imageUri = savedInstanceState.getParcelable("image");
-            ArrayList<String> listOfIngredients = savedInstanceState.getStringArrayList("listIngr");
-            hideLastPlusSign();
-            for (int i = 2; i < listOfIngredients.size(); i++) {
-                addNewEditText(listOfIngredients.get(i));
-                if (i != (listOfIngredients.size() - 1)) {
+            imageUri = savedInstanceState.getParcelable(Constants.IMAGE);
+            ArrayList<String> listOfIngredients = savedInstanceState.getStringArrayList(Constants.LIST_OF_INGRED);
+            if (listOfIngredients != null) {
+                if (listOfIngredients.size() != 1) {
                     hideLastPlusSign();
+                }
+                for (int i = 2; i < listOfIngredients.size(); i++) {
+                    addNewEditText(listOfIngredients.get(i));
+                    if (i != (listOfIngredients.size() - 1)) {
+                        hideLastPlusSign();
+                    }
                 }
             }
             selectImageBtn.setImageURI(imageUri);
@@ -100,10 +100,17 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     private void addRecipe() {
+//        Recipe recipe = new Recipe("0", titleEditTxt.getText().toString(),
+//                Profile.getCurrentProfile().getName(), imageUri.toString(), "", 0);
+//        recipe.setListOfIngredients(getIngredients());
+//        Intent intent = new Intent();
+//        intent.putExtra(Constants.NEW_RECIPE, recipe);
+//        setResult(RESULT_OK, intent);
+//        finish();
         Recipe recipe = new Recipe("0", titleEditTxt.getText().toString(), Profile.getCurrentProfile().getName(), imageUri.toString(), "", 0);
         recipe.setListOfIngredients(getIngredients());
-        Intent intent = new Intent(AddRecipeActivity.this, MainNavActivity.class);
-        intent.putExtra("new_recipe", recipe);
+        Intent intent = new Intent(AddRecipeActivity.this,MainNavActivity.class);
+        intent.putExtra(Constants.NEW_RECIPE,recipe);
         startActivity(intent);
     }
 
@@ -132,7 +139,8 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     private void addNewEditText(String str) {
         LinearLayout linearLayout = findViewById(R.id.ingrLayout);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout horLinearLayout = new LinearLayout(this);
         horLinearLayout.setLayoutParams(params);
         horLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -148,6 +156,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     private void hideLastPlusSign() {
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
         EditText editText = listOfEditTexts.get(listOfEditTexts.size() - 1);
@@ -155,11 +164,13 @@ public class AddRecipeActivity extends AppCompatActivity {
         LinearLayout horLinearLayout = (LinearLayout) editText.getParent();
         horLinearLayout.removeAllViews();
         horLinearLayout.addView(editText);
+
     }
 
     private EditText buildEditText() {
         EditText editText = new EditText(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.95f);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, 0.95f);
         editText.setLayoutParams(params);
         editText.setBackgroundResource(R.drawable.rounded_edittext2);
         editText.setPadding(16, 16, 16, 16);
@@ -169,9 +180,10 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     private ImageButton buildImageButton() {
         ImageButton imageButton = new ImageButton(this);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         imageButton.setLayoutParams(params);
-        imageButton.setImageResource(R.mipmap.ic_add_black_24dp);
+        imageButton.setImageResource(R.drawable.ic_add_black_24dp);
         imageButton.setPadding(16, 16, 16, 16);
         imageButton.setBackgroundColor(Color.WHITE);
         imageButton.setOnClickListener(onClickListener);
@@ -181,12 +193,12 @@ public class AddRecipeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == GALLERY_REQUEST) && resultCode == RESULT_OK) {
+        if ((requestCode == Constants.GALLERY_REQUEST) && resultCode == RESULT_OK) {
             imageUri = data.getData();
 
             selectImageBtn.setImageURI(imageUri);
         }
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+        if (requestCode == Constants.CAMERA_REQUEST && resultCode == RESULT_OK) {
 
             selectImageBtn.setImageURI(imageUri);
         }
@@ -197,21 +209,21 @@ public class AddRecipeActivity extends AppCompatActivity {
     private void getImageGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, GALLERY_REQUEST);
+        startActivityForResult(galleryIntent, Constants.GALLERY_REQUEST);
     }
 
     private void getImageCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
+            File photoFile;
             photoFile = createImageFile();
             if (photoFile != null) {
                 imageUri = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+                startActivityForResult(takePictureIntent, Constants.CAMERA_REQUEST);
             }
         }
     }
@@ -229,7 +241,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             );
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("ff", "fff");
+            Log.e(Constants.TAG, "Error creating temporal file");
             return null;
         }
     }
@@ -260,8 +272,8 @@ public class AddRecipeActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putParcelable("image", imageUri);
-        outState.putStringArrayList("listIngr", getIngredients());
+        outState.putParcelable(Constants.IMAGE, imageUri);
+        outState.putStringArrayList(Constants.LIST_OF_INGRED, getIngredients());
         super.onSaveInstanceState(outState);
     }
 }

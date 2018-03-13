@@ -24,6 +24,7 @@ import com.example.olena.recipeapp.adapters.RecipeListAdapter;
 import com.example.olena.recipeapp.models.Recipe;
 import com.example.olena.recipeapp.socialsitesmanagers.FacebookManager;
 import com.example.olena.recipeapp.socialsitesmanagers.TwitterManager;
+import com.example.olena.recipeapp.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ import java.util.ArrayList;
 
 public class RecipeDetailsFragment extends Fragment {
 
-    public static final String ARGS_LIST = "args_list";
 
     private String transactionName;
     private TextView titleTxt;
@@ -40,14 +40,16 @@ public class RecipeDetailsFragment extends Fragment {
     private ImageButton goBackBtn;
     private RecyclerView recyclerViewIngr;
     private TwitterManager twitterManager;
+    private ArrayList<Recipe> listOfRecipes;
+    private int position;
 
     public static RecipeDetailsFragment newInstance(int position, RecipeListAdapter adapter) {
         RecipeDetailsFragment myFragment = new RecipeDetailsFragment();
         ArrayList<Recipe> list = new ArrayList<>();
         list.addAll(adapter.getListOfRecipes());
         Bundle args = new Bundle();
-        args.putInt("position", position);
-        args.putParcelableArrayList(ARGS_LIST, list);
+        args.putInt(Constants.POSITION, position);
+        args.putParcelableArrayList(Constants.ARGS_LIST, list);
         myFragment.setArguments(args);
 
         return myFragment;
@@ -77,15 +79,20 @@ public class RecipeDetailsFragment extends Fragment {
         recyclerViewIngr = view.findViewById(R.id.rec_view_ingredients);
         Button shareFacebookBtn = view.findViewById(R.id.shareFacebookBtn);
         Button shareTwitterBtn = view.findViewById(R.id.shareTwitterBtn);
-        final ArrayList<Recipe> listOfRecipes = getArguments().getParcelableArrayList("list");
-        final int position = getArguments().getInt("position");
+        if (getArguments() != null) {
+            listOfRecipes = getArguments().getParcelableArrayList(Constants.ARGS_LIST);
+            position = getArguments().getInt(Constants.POSITION);
+        }
+
+
         shareFacebookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FacebookManager facebookManager = new FacebookManager(getActivity());
-                facebookManager.postToFacebook(listOfRecipes.get(position).getImageUrl(),
-                        listOfRecipes.get(position).getTitle(),
-                        listOfRecipes.get(position).getListOfIngredientsString());
+                if (listOfRecipes != null)
+                    facebookManager.postToFacebook(listOfRecipes.get(position).getImageUrl(),
+                            listOfRecipes.get(position).getTitle(),
+                            listOfRecipes.get(position).getListOfIngredientsString());
 
             }
         });
@@ -99,7 +106,9 @@ public class RecipeDetailsFragment extends Fragment {
         goBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().onBackPressed();
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
             }
         });
         fillFields();
@@ -118,8 +127,10 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
     private void fillFields() {
-        final ArrayList<Recipe> listOfRecipes = getArguments().getParcelableArrayList("list");
-        final int position = getArguments().getInt("position");
+        if (getArguments() != null) {
+            listOfRecipes = getArguments().getParcelableArrayList(Constants.ARGS_LIST);
+            position = getArguments().getInt(Constants.POSITION);
+        }
         titleTxt.setText(listOfRecipes.get(position).getTitle());
         authorTxt.setText(listOfRecipes.get(position).getPublisher());
         imageView.setTransitionName(transactionName);
@@ -127,7 +138,8 @@ public class RecipeDetailsFragment extends Fragment {
                 .load(listOfRecipes.get(position).getImageUrl())
                 .into(imageView);
         recyclerViewIngr.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerViewIngr.setAdapter(new IngredientListAdapter(listOfRecipes.get(position).getListOfIngredients()));
+        recyclerViewIngr.setAdapter(new IngredientListAdapter(listOfRecipes.get(position)
+                .getListOfIngredients()));
 
     }
 

@@ -7,7 +7,6 @@
     tools:context="com.example.olena.recipeapp.activities.AddRecipeActivity">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/cont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -23,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/title"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size"
             app:layout_constraintTop_toBottomOf="@+id/imageBtn" />
 
         <EditText
@@ -72,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:contentDescription="@string/plus_image"
-                    android:src="@mipmap/ic_add_black_24dp"
+                    android:src="@drawable/ic_add_black_24dp"
                     android:background="@color/white" />
             </LinearLayout>
         </LinearLayout>
